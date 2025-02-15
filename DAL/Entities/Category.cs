@@ -14,15 +14,11 @@ namespace DAL.Entities
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Mark as auto-increment (identity)
         public int CategoryId { get; set; }
-
         [Required]
         public string CategoryName { get; set; }
-
         [Required]
         public string CategoryDescription { get; set; }
-
         public bool? IsActive { get; set; } = true;
-
         public int? ParentCategoryId { get; set; }
         public virtual Category? ParentCategory { get; set; } // Self-referencing relationship
     }
