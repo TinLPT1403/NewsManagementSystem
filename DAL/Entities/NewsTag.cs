@@ -13,10 +13,8 @@ namespace DAL.Entities
         [Required]
         public string NewsArticleId { get; set; }
         public virtual NewsArticle NewsArticle { get; set; }
-
         [Required]
         public int TagId { get; set; }
-
         public virtual Tag Tag { get; set; } // Navigation to Tag
     }
 }
