@@ -26,32 +26,59 @@ namespace BLL.Services
                 CategoryDescription = dto.CategoryDescription,
             };
             await _unitOfWork.Categories.AddAsync(category);
-            await _unitOfWork.SaveChangesAsync();   
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteCategory(int id)
         {
-            await _unitOfWork.Categories.DeleteAsync(id);
-            await _unitOfWork.SaveChangesAsync();
+            var relatedArticle = await _unitOfWork.NewsArticles.FirstOrDefaultAsync(u => u.CategoryId == id);
+            if (relatedArticle != null)
+            {
+                var category = await _unitOfWork.Categories.GetByIdAsync(id);
+                if (category != null)
+                {
+                    category.IsActive = false;
+                    await _unitOfWork.Categories.UpdateAsync(category);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+            }
         }
 
-        public async Task<List<Category>> GetAllCategories()
-        {
-            var categoryList = await _unitOfWork.Categories.GetAllAsync();
-            return categoryList;
-        }
-
-        public async Task<Category> GetCategoryById(int id)
-        {
-            var category = await _unitOfWork.Categories.GetByIdAsync(id);
-            return category;
-        }
+        public async Task<List<Category>> GetAllCategories() => await _unitOfWork.Categories.GetAllAsync();
+        public async Task<Category> GetCategoryById(int id) => await _unitOfWork.Categories.GetByIdAsync(id);
 
         public async Task UpdateCategory(int id, CategoryDTO dto)
         {
+            // Fetch the existing category by ID
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
-            category.CategoryName = dto.CategoryName;
-            category.CategoryDescription = dto.CategoryDescription;
+
+            // Check if the category exists
+            if (category == null)
+            {
+                throw new KeyNotFoundException($"Category with ID {id} not found.");
+            }
+
+            // Update CategoryName if provided (check for null or empty)
+            if (!string.IsNullOrWhiteSpace(dto.CategoryName))
+            {
+                category.CategoryName = dto.CategoryName;
+            }
+
+            // Update CategoryDescription if provided (check for null or empty)
+            if (!string.IsNullOrWhiteSpace(dto.CategoryDescription))
+            {
+                category.CategoryDescription = dto.CategoryDescription;
+            }
+
+            // No need to update IsActive since the check is not mentioned, assuming it's handled elsewhere
+
+            // If ParentCategoryId is provided (and not 0), update it
+            if (dto.ParentCategoryId.HasValue && dto.ParentCategoryId.Value != 0)
+            {
+                category.ParentCategoryId = dto.ParentCategoryId.Value;
+            }
+
+            // Update the category
             await _unitOfWork.Categories.UpdateAsync(category);
             await _unitOfWork.SaveChangesAsync();
         }
