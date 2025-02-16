@@ -17,6 +17,7 @@ namespace NewsManagementSystem
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddRazorPages();
+            builder.Services.AddControllersWithViews();
             //JWT token
 
             var key = Encoding.ASCII.GetBytes("ilovecat");
@@ -24,7 +25,8 @@ namespace NewsManagementSystem
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options => {
+            }).AddJwtBearer(options =>
+            {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -39,8 +41,6 @@ namespace NewsManagementSystem
             });
             //register service
             // Register the DbContext (adjust options as needed)
-            builder.Services.AddDbContext<DAL.Data.NewsContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("NewsContext")));
 
             // Register IUnitOfWork and its implementation
             builder.Services.AddScoped<DAL.UnitOfWork.IUnitOfWork, DAL.UnitOfWork.UnitOfWork>();
@@ -81,6 +81,9 @@ namespace NewsManagementSystem
 
             app.UseAuthorization();
 
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=News}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();
