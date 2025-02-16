@@ -38,6 +38,14 @@ namespace NewsManagementSystem
 
             });
             //register service
+            // Register the DbContext (adjust options as needed)
+            builder.Services.AddDbContext<DAL.Data.NewsContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("NewsContext")));
+
+            // Register IUnitOfWork and its implementation
+            builder.Services.AddScoped<DAL.UnitOfWork.IUnitOfWork, DAL.UnitOfWork.UnitOfWork>();
+
+            // Existing registrations
             builder.Services.AddScoped<BLL.Interfaces.IAccountService, BLL.Services.AccountService>();
             builder.Services.AddScoped<BLL.Interfaces.ICategoryService, BLL.Services.CategoryService>();
             builder.Services.AddScoped<BLL.Interfaces.INewsArticleService, BLL.Services.NewsArticleService>();
