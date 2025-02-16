@@ -17,6 +17,7 @@ namespace NewsManagementSystem
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddRazorPages();
+            builder.Services.AddControllersWithViews();
             //JWT token
 
             var key = Encoding.ASCII.GetBytes("ilovecat");
@@ -81,6 +82,9 @@ namespace NewsManagementSystem
 
             app.UseAuthorization();
 
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=News}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.Run();
