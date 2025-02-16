@@ -1,4 +1,7 @@
+using BLL.Interfaces;
+using BLL.Services;
 using DAL.Data;
+using DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace NewsManagementSystem
@@ -9,11 +12,21 @@ namespace NewsManagementSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
+
             builder.Services.AddDbContext<NewsContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddRazorPages();
+
+            builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<INewsArticleService, NewsArticleService>();
+            builder.Services.AddScoped<INewsTagService, NewsTagService>();
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -30,6 +43,10 @@ namespace NewsManagementSystem
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.MapRazorPages();
 
