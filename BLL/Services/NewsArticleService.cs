@@ -2,9 +2,11 @@
 using BLL.Interfaces;
 using DAL.Entities;
 using DAL.UnitOfWork;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,9 +15,12 @@ namespace BLL.Services
     public class NewsArticleService : INewsArticleService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public NewsArticleService(IUnitOfWork unitOfWork)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public NewsArticleService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task CreateNewsArticle(NewsArticleCreateDTO dto)
         {
@@ -24,7 +29,7 @@ namespace BLL.Services
             {
                 throw new ArgumentException("Headline is required.");
             }
-
+            var userId = GetUserFromToken();
             // Create new article
             var article = new NewsArticle
             {
@@ -36,7 +41,7 @@ namespace BLL.Services
                 NewsStatus = dto.NewsStatus,  // Default to true if not provided
                 CategoryId = dto.CategoryId,
                 ModifiedDate = DateTime.UtcNow,
-                // CreatedById = GetUserFromToken() // You can handle user ID if needed
+                CreatedById = userId
             };
 
             // Add article to the repository
@@ -79,6 +84,11 @@ namespace BLL.Services
 
 
         public async Task<NewsArticle> GetNewsArticle(string id) => await _unitOfWork.NewsArticles.GetByIdAsync(id);
+
+        public Task<string?> GetNewsArticlesByUserId(int userId)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task UpdateNewsArticle(string id, NewsArticleUpdateDTO dto)
         {
@@ -155,6 +165,15 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
+        private int GetUserFromToken()
+        {
+            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
 
+            return int.Parse(userIdClaim.Value);
+        }
     }
 }

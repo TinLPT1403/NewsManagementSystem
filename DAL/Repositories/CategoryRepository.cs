@@ -1,6 +1,7 @@
 ﻿using DAL.Data;
 using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,18 @@ namespace DAL.Repositories
         {
             newsContext = context;
         }
+        public async Task<List<NewsArticle>> GetAllByCategoryIdAsync(int categoryId)
+        {
+            return await newsContext.NewsArticles
+                .Where(na => na.CategoryId == categoryId)
+                .ToListAsync();
+        }
+
+        public async Task RemoveAsync(Category category)
+        {
+            newsContext.Categories.Remove(category);
+            await newsContext.SaveChangesAsync();
+        }
+        
     }
 }

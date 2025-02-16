@@ -9,5 +9,7 @@ namespace DAL.Interfaces
 {
     public interface ICategoryRepository : IGenericRepository<Category>
     {
+        Task<List<NewsArticle>> GetAllByCategoryIdAsync(int categoryId);
+        Task RemoveAsync(Category category);
     }
 }
