@@ -11,7 +11,7 @@ namespace DAL.Entities
     {
         [Key]
         [Required]
-        public string NewsArticleId { get; set; }
+        public string NewsArticleId { get; set; } = Guid.NewGuid().ToString();
         public virtual NewsArticle NewsArticle { get; set; }
         [Required]
         public int TagId { get; set; }

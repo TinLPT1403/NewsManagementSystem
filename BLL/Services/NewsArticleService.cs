@@ -28,7 +28,6 @@ namespace BLL.Services
             // Create new article
             var article = new NewsArticle
             {
-                NewsArticleId = Guid.NewGuid().ToString(),
                 NewsTitle = dto.NewsTitle,  // Optional, can be null
                 Headline = dto.Headline,
                 CreatedDate = DateTime.UtcNow,

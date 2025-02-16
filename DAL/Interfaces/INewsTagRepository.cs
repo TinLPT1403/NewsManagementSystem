@@ -9,5 +9,7 @@ namespace DAL.Interfaces
 {
     public interface INewsTagRepository : IGenericRepository<NewsTag>
     {
+        Task<List<Tag>> GetTagsFromArticleAsync(string articleId);
+        Task<List<NewsArticle>> GetArticlesFromTagAsync(int tagId);
     }
 }
