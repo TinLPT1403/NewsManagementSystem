@@ -15,5 +15,6 @@ namespace BLL.Interfaces
         Task DeleteNewsArticle(string id);
         Task<NewsArticle> GetNewsArticle(string id);
         Task<List<NewsArticle>> GetAllNewsArticles();
+        Task<string?> GetNewsArticlesByUserId(int userId);
     }
 }
