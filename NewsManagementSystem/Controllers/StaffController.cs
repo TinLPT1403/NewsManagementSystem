@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BLL.Controllers
+namespace NewsManagementSystem.Controllers
 {
     [Authorize(Roles = "Staff")]
     public class StaffController : Controller
