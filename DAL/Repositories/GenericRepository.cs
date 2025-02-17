@@ -45,7 +45,6 @@ namespace DAL.Repositories
             if (entity != null)
             {
                 Delete(entity);
-                await _newsContext.SaveChangesAsync();
             }
         }
 

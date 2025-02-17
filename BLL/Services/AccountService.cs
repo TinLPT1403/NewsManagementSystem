@@ -95,7 +95,7 @@ namespace BLL.Services
             var account = await _unitOfWork.SystemAccounts.GetByIdAsync(id);
             if (account == null) throw new KeyNotFoundException("Account not found.");
 
-            await _unitOfWork.SystemAccounts.RemoveAsync(account);
+            await _unitOfWork.SystemAccounts.DeleteAsync(account);
             await _unitOfWork.SaveChangesAsync();
         }
     }

@@ -22,11 +22,5 @@ namespace DAL.Repositories
         {
             return await _newsContext.SystemAccounts.FirstOrDefaultAsync(a => a.AccountEmail == email);
         }
-
-        public async Task RemoveAsync(SystemAccount account)
-        {
-            newsContext.SystemAccounts.Remove(account);
-            await newsContext.SaveChangesAsync();
-        }
     }
 }
