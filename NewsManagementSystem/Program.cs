@@ -1,5 +1,8 @@
+using BLL.Interfaces;
+using BLL.Services;
 using DAL.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -12,7 +15,11 @@ namespace NewsManagementSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Add services to the container.
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
+
             builder.Services.AddDbContext<NewsContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -83,7 +90,8 @@ namespace NewsManagementSystem
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=News}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
             app.MapRazorPages();
 
             app.Run();

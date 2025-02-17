@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/DAL/Migrations/NewsContextModelSnapshot.cs
+/NewsManagementSystem/appsettings.json
+/DAL/Migrations/20250216094445_Initial.cs
+/DAL/Migrations/20250216094445_Initial.Designer.cs
+/DAL/Migrations/NewsContextModelSnapshot.cs
