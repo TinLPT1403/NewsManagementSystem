@@ -11,5 +11,9 @@ namespace BLL.Utils
 {
     public class MappingProfile : Profile
     {
+        public MappingProfile()
+        {
+            CreateMap<Category, CategoryDTO>();
+        }
     }
 }

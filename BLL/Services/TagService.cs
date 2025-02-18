@@ -18,7 +18,7 @@ namespace BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task CreateTag(TagDTO dto)
+        public async Task CreateTagAsync(TagDTO dto)
         {
             var tag = new Tag
             {
@@ -29,7 +29,7 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteTag(int TagId)
+        public async Task DeleteTagAsync(int TagId)
         {
             var tag = _unitOfWork.Tags.GetByIdAsync(TagId);
             if (tag == null)
@@ -40,7 +40,7 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<Tag>> GetAllTags()
+        public async Task<List<Tag>> GetAllTagsAsync()
         {
             var tag = await _unitOfWork.Tags.GetAllAsync();
             if (!tag.Any())
@@ -52,7 +52,7 @@ namespace BLL.Services
 
         }
 
-        public async Task<Tag> GetTag(int TagId)
+        public async Task<Tag> GetTagAsync(int TagId)
         {
             var tag = await _unitOfWork.Tags.GetByIdAsync(TagId);
             if (tag == null)
@@ -62,7 +62,7 @@ namespace BLL.Services
             return tag;
         }
 
-        public async Task UpdateTag(int TagId, TagDTO dto)
+        public async Task UpdateTagAsync(int TagId, TagDTO dto)
         {
             var tag = await _unitOfWork.Tags.GetByIdAsync(TagId);
             if (tag == null)

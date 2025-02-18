@@ -22,7 +22,7 @@ namespace BLL.Services
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
         }
-        public async Task CreateNewsArticle(NewsArticleCreateDTO dto)
+        public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto)
         {
             // Ensure required fields are not empty
             if (string.IsNullOrWhiteSpace(dto.Headline))
@@ -69,7 +69,7 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteNewsArticle(string id)
+        public async Task DeleteNewsArticleAsync(string id)
         {
             var article = await _unitOfWork.NewsArticles.GetByIdAsync(id);
             if(article != null)
@@ -80,17 +80,17 @@ namespace BLL.Services
             }
         }
 
-        public async Task<List<NewsArticle>> GetAllNewsArticles() => await _unitOfWork.NewsArticles.GetAllAsync();
+        public async Task<List<NewsArticle>> GetAllNewsArticlesAsync() => await _unitOfWork.NewsArticles.GetAllAsync();
 
 
-        public async Task<NewsArticle> GetNewsArticle(string id) => await _unitOfWork.NewsArticles.GetByIdAsync(id);
+        public async Task<NewsArticle> GetNewsArticleAsync(string id) => await _unitOfWork.NewsArticles.GetByIdAsync(id);
 
-        public Task<string?> GetNewsArticlesByUserId(int userId)
+        public Task<string?> GetNewsArticlesByUserIdAsync(int userId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task UpdateNewsArticle(string id, NewsArticleUpdateDTO dto)
+        public async Task UpdateNewsArticleAsync(string id, NewsArticleUpdateDTO dto)
         {
             // Fetch the existing article by ID
             var article = await _unitOfWork.NewsArticles.GetByIdAsync(id);

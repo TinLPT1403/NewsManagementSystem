@@ -23,7 +23,7 @@ namespace NewsManagementSystem.Controllers
         // Lists only active news articles.
         public async Task<IActionResult> Index()
         {
-            var articles = await _newsArticleService.GetAllNewsArticles();
+            var articles = await _newsArticleService.GetAllNewsArticlesAsync();
             var activeArticles = articles.Where(a => a.NewsStatus == true).ToList();
             return View(activeArticles);
         }
@@ -32,7 +32,7 @@ namespace NewsManagementSystem.Controllers
         // Shows details if the article exists and is active.
         public async Task<IActionResult> Details(string id)
         {
-            var article = await _newsArticleService.GetNewsArticle(id);
+            var article = await _newsArticleService.GetNewsArticleAsync(id);
             if (article == null || article.NewsStatus != true)
             {
                 return NotFound();

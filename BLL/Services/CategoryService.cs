@@ -53,7 +53,7 @@ namespace BLL.Services
             // Check if the category is associated with any news articles
             if ((await _unitOfWork.NewsArticles.GetAllByCategoryIdAsync(id)).Any()) throw new InvalidOperationException("Cannot delete category associated with news articles.");
 
-            await _unitOfWork.Categories.RemoveAsync(category);
+            await _unitOfWork.Categories.DeleteAsync(category);
             await _unitOfWork.SaveChangesAsync();
         }
     }

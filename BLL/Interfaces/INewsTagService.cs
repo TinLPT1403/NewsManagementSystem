@@ -9,9 +9,9 @@ namespace BLL.Interfaces
 {
     public interface INewsTagService
     {
-        Task AddNewsTag(string NewsArticleId, int TagId);
-        Task<List<Tag>> GetTagsOfArticle(string NewsArticleId);
-        Task<List<NewsArticle>> GetArticlesFromTag(int TagId);
-        Task DeleteNewsTag(string NewsArticleId, int TagId);
+        Task AddNewsTagAsync(string NewsArticleId, int TagId);
+        Task<List<Tag>> GetTagsOfArticleAsync(string NewsArticleId);
+        Task<List<NewsArticle>> GetArticlesFromTagAsync(int TagId);
+        Task DeleteNewsTagAsync(string NewsArticleId, int TagId);
     }
 }

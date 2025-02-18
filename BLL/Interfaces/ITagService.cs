@@ -10,10 +10,10 @@ namespace BLL.Interfaces
 {
     public interface ITagService
     {
-        Task CreateTag(TagDTO dto);
-        Task UpdateTag(int TagId, TagDTO dto);
-        Task DeleteTag(int TagId);
-        Task<Tag> GetTag(int TagId);
-        Task<List<Tag>> GetAllTags();
+        Task CreateTagAsync(TagDTO dto);
+        Task UpdateTagAsync(int TagId, TagDTO dto);
+        Task DeleteTagAsync(int TagId);
+        Task<Tag> GetTagAsync(int TagId);
+        Task<List<Tag>> GetAllTagsAsync();
     }
 }

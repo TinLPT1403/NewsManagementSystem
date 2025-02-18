@@ -1,4 +1,5 @@
-﻿using BLL.DTOs;
+﻿using AutoMapper;
+using BLL.DTOs;
 using BLL.Interfaces;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +18,13 @@ namespace NewsManagementSystem.Controllers
     {
         private readonly ICategoryService _categoryService;
         private readonly INewsArticleService _newsArticleService;
+        private readonly IMapper _mapper;
 
-        public StaffController(ICategoryService categoryService, INewsArticleService newsArticleService)
+        public StaffController(ICategoryService categoryService, INewsArticleService newsArticleService, IMapper mapper)
         {
             _categoryService = categoryService;
             _newsArticleService = newsArticleService;
+            _mapper = mapper;
         }
 
         // GET: /Staff/ManageCategories
@@ -39,14 +42,15 @@ namespace NewsManagementSystem.Controllers
 
         // POST: /Staff/CreateCategory
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(Category category)
+        public async Task<IActionResult> CreateCategory(CategoryDTO dto)
         {
             if (ModelState.IsValid)
-            {
+            { 
+                var category = _mapper.Map<Category>(dto);
                 await _categoryService.CreateCategoryAsync(category);
                 return RedirectToAction(nameof(ManageCategories));
             }
-            return View(category);
+            return View(dto);
         }
 
         // GET: /Staff/EditCategory/{id}
@@ -87,7 +91,7 @@ namespace NewsManagementSystem.Controllers
         // GET: /Staff/ManageNewsArticles
         public async Task<IActionResult> ManageNewsArticles()
         {
-            var articles = await _newsArticleService.GetAllNewsArticles();
+            var articles = await _newsArticleService.GetAllNewsArticlesAsync();
             return View(articles);
         }
 
@@ -103,7 +107,7 @@ namespace NewsManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _newsArticleService.CreateNewsArticle(dto);
+                await _newsArticleService.CreateNewsArticleAsync(dto);
                 return RedirectToAction(nameof(ManageNewsArticles));
             }
             return View(dto);
@@ -112,7 +116,7 @@ namespace NewsManagementSystem.Controllers
         // GET: /Staff/EditNewsArticle/{id}
         public async Task<IActionResult> EditNewsArticle(string id)
         {
-            var article = await _newsArticleService.GetNewsArticle(id);
+            var article = await _newsArticleService.GetNewsArticleAsync(id);
             if (article == null) return NotFound();
             return View(article);
         }
@@ -123,7 +127,7 @@ namespace NewsManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _newsArticleService.UpdateNewsArticle(id, dto);
+                await _newsArticleService.UpdateNewsArticleAsync(id, dto);
                 return RedirectToAction(nameof(ManageNewsArticles));
             }
             return View(dto);
@@ -133,7 +137,7 @@ namespace NewsManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteNewsArticle(string id)
         {
-            await _newsArticleService.DeleteNewsArticle(id);
+            await _newsArticleService.DeleteNewsArticleAsync(id);
             return RedirectToAction(nameof(ManageNewsArticles));
         }
 
@@ -148,7 +152,7 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> MyNewsHistory()
         {
             var userId = GetUserFromToken();
-            var newsHistory = await _newsArticleService.GetNewsArticlesByUserId(userId);
+            var newsHistory = await _newsArticleService.GetNewsArticlesByUserIdAsync(userId);
             return View(newsHistory);
         }
 
