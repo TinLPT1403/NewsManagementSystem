@@ -24,5 +24,15 @@ namespace DAL.Repositories
                 .Where(article => article.CategoryId == id)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<NewsArticle>> GetNewsArticlesAsync()
+        {
+            return await newsContext.NewsArticles
+                .Include(article => article.Category)   // Include Category to access CategoryDescription
+                .Include(article => article.CreatedBy)  // Include CreatedBy to access AccountId
+                .Include(article => article.UpdatedBy)  // Include UpdatedBy to access AccountId
+                .ToListAsync();
+        }
+
     }
 }

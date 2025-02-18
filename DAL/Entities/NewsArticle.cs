@@ -18,7 +18,7 @@ namespace DAL.Entities
         public DateTime? CreatedDate { get; set; }
         public string? NewsContent { get; set; }
         public string? NewsSource { get; set; }
-        public bool? NewsStatus { get; set; }
+        public bool? NewsStatus { get; set; } = true;
         public DateTime? ModifiedDate { get; set; }
         public int? CreatedById { get; set; }
         public virtual SystemAccount? CreatedBy { get; set; } // Navigation for CreatedBy
