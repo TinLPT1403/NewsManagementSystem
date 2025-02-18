@@ -14,6 +14,6 @@ namespace BLL.Interfaces
         Task UpdateTagAsync(int TagId, TagDTO dto);
         Task DeleteTagAsync(int TagId);
         Task<Tag> GetTagAsync(int TagId);
-        Task<List<Tag>> GetAllTagsAsync();
+        Task<IEnumerable<Tag>> GetAllTagsAsync();
     }
 }

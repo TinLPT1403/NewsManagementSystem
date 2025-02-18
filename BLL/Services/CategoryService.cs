@@ -16,7 +16,7 @@ namespace BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<List<Category>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
         {
             return await _unitOfWork.Categories.GetAllAsync();
         }

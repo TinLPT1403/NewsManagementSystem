@@ -62,7 +62,7 @@ namespace BLL.Services
 
         }
 
-        public async Task<List<Tag>> GetTagsOfArticleAsync(string newsArticleId)
+        public async Task<IEnumerable<Tag>> GetTagsOfArticleAsync(string newsArticleId)
         {
             var article = await _unitOfWork.NewsArticles.GetByIdAsync(newsArticleId);
             if (article == null)
@@ -79,7 +79,7 @@ namespace BLL.Services
             return tags;
         }
 
-        public async Task<List<NewsArticle>> GetArticlesFromTagAsync(int tagId)
+        public async Task<IEnumerable<NewsArticle>> GetArticlesFromTagAsync(int tagId)
         {
             var tag = await _unitOfWork.Tags.GetByIdAsync(tagId);
             if (tag == null)

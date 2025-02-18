@@ -10,7 +10,7 @@ namespace BLL.Interfaces
 {
     public interface ICategoryService
     {
-        Task<List<Category>> GetAllCategoriesAsync();
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
         Task<Category> GetCategoryByIdAsync(int id);
         Task CreateCategoryAsync(Category category);
         Task UpdateCategoryAsync(int id, Category category);

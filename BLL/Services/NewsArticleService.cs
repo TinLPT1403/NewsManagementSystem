@@ -80,7 +80,7 @@ namespace BLL.Services
             }
         }
 
-        public async Task<List<NewsArticle>> GetAllNewsArticlesAsync() => await _unitOfWork.NewsArticles.GetAllAsync();
+        public async Task<IEnumerable<NewsArticle>> GetAllNewsArticlesAsync() => await _unitOfWork.NewsArticles.GetAllAsync();
 
 
         public async Task<NewsArticle> GetNewsArticleAsync(string id) => await _unitOfWork.NewsArticles.GetByIdAsync(id);

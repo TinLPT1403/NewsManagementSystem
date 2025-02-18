@@ -40,7 +40,7 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<Tag>> GetAllTagsAsync()
+        public async Task<IEnumerable<Tag>> GetAllTagsAsync()
         {
             var tag = await _unitOfWork.Tags.GetAllAsync();
             if (!tag.Any())

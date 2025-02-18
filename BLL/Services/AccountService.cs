@@ -60,7 +60,7 @@ namespace BLL.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<List<SystemAccount>> GetAllAccountsAsync()
+        public async Task<IEnumerable<SystemAccount>> GetAllAccountsAsync()
         {
             return await _unitOfWork.SystemAccounts.GetAllAsync();
         }

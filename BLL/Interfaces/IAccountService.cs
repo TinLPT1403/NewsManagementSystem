@@ -10,7 +10,7 @@ namespace BLL.Interfaces
     public interface IAccountService
     {
         Task<string?> AuthenticateAsync(string email, string password);
-        Task<List<SystemAccount>> GetAllAccountsAsync();
+        Task<IEnumerable<SystemAccount>> GetAllAccountsAsync();
         Task<SystemAccount> GetAccountByIdAsync(int id);
         Task CreateAccountAsync(SystemAccount account);
         Task UpdateAccountAsync(int id, SystemAccount account);
