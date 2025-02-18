@@ -1,91 +1,208 @@
-﻿@model IEnumerable<DAL.Entities.NewsArticle>
-
-@{
-    ViewData["Title"] = "1";
-    Layout = "~/Pages/Shared/_Layout.cshtml";
+﻿@model IEnumerable<DAL.Entities.NewsArticle> 
+    
+   @{
+    ViewData["Title"] = "News Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+<style>
+    /* Theme Variables - Customize these to change the theme */
+    :root {
+        --primary-color: #007bff; /* Example primary color (like buttons) */
+        --secondary-color: #6c757d; /* Example secondary color */
+        --background-color: #f8f9fa; /* Light background */
+        --text-color: #343a40; /* Dark text */
+        --accent-color: #ffc107; /* Example accent color (like warnings) */
+        --article-background: #ffffff; /* Article background */
+        --article-border: #dee2e6; /* Article border color */
+        --meta-color: #6c757d; /* Meta text color */
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsTitle)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Headline)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsContent)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsSource)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NewsStatus)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ModifiedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: sans-serif; /* Example font */
+    }
+
+    h1, h2, h3 {
+        color: var(--text-color);
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: darken(var(--primary-color), 10%); /* Example hover effect - function needs to be defined or replaced with specific color */
+        border-color: darken(var(--primary-color), 10%); /* Example hover effect */
+    }
+
+    .btn-warning {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: var(--text-color); /* Ensure text is visible on warning button */
+    }
+
+    .btn-warning:hover {
+        background-color: darken(var(--accent-color), 10%);
+        border-color: darken(var(--accent-color), 10%);
+    }
+
+    .btn-info {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+
+    .btn-info:hover {
+        background-color: darken(var(--secondary-color), 10%);
+        border-color: darken(var(--secondary-color), 10%);
+    }
+
+    .btn-danger {
+        background-color: #dc3545; /* Default danger color - could also be a theme variable */
+        border-color: #dc3545;
+    }
+
+    .btn-danger:hover {
+        background-color: darken(#dc3545, 10%);
+        border-color: darken(#dc3545, 10%);
+    }
+
+
+    .news-container {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .news-article {
+        border: 1px solid var(--article-border);
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: var(--article-background);
+    }
+
+    .news-article h2 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: var(--text-color);
+    }
+
+    .news-article h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: var(--secondary-color);
+        font-size: 1.2em;
+    }
+
+    .news-article .news-meta {
+        font-size: 0.9em;
+        color: var(--meta-color);
+        margin-bottom: 10px;
+    }
+
+    .news-article .news-content-preview {
+        margin-bottom: 15px;
+        color: var(--text-color);
+    }
+
+    .news-actions {
+        text-align: right;
+    }
+
+    .news-actions a {
+        margin-left: 5px;
+    }
+
+    .create-new-button {
+        margin-bottom: 20px;
+    }
+
+    /* Dark Theme Example - Uncomment to switch to dark theme */
+    /*.dark-theme {
+        --primary-color: #00aaff;
+        --secondary-color: #adb5bd;
+        --background-color: #343a40; !* Dark background *!
+        --text-color: #f8f9fa; !* Light text *!
+        --accent-color: #ffdd57;
+        --article-background: #495057;
+        --article-border: #6c757d;
+        --meta-color: #adb5bd;
+    }
+
+    body.dark-theme {
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+
+    .dark-theme h1, .dark-theme h2, .dark-theme h3 {
+        color: var(--text-color);
+    }
+
+    .dark-theme .news-article {
+        background-color: var(--article-background);
+        border-color: var(--article-border);
+    }
+
+    .dark-theme .news-article h2 {
+        color: var(--text-color);
+    }
+
+    .dark-theme .news-article h3 {
+        color: var(--secondary-color);
+    }
+
+    .dark-theme .news-article .news-meta {
+        color: var(--meta-color);
+    }
+
+    .dark-theme .news-article .news-content-preview {
+        color: var(--text-color);
+    }*/
+
+
+</style>
+
+@* To enable Dark Theme, add the class "dark-theme" to the body tag, e.g., <body class="dark-theme">*@
+@*<body>*@
+<body>
+
+    <h1>News Feed</h1>
+
+    <p class="create-new-button">
+        <a asp-action="Create" class="btn btn-primary">Create New Article</a>
+    </p>
+
+    <div class="news-container">
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NewsTitle)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Headline)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NewsContent)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NewsSource)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NewsStatus)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ModifiedDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreatedBy!.AccountId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.UpdatedBy!.AccountId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.CategoryDescription)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-info">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
+                <div class="news-article">
+                    <h2>
+                        @Html.DisplayFor(modelItem => item.NewsTitle)
+                    </h2>
+                    <h3>
+                        @Html.DisplayFor(modelItem => item.Headline)
+                    </h3>
+                    
+                    <div class="news-content-preview">
+                        @{
+                            // Create a preview of the news content, e.g., first 100 characters
+                            string contentPreview = item.NewsContent != null && item.NewsContent.Length > 100 ? item.NewsContent.Substring(0, 100) + "..." : item.NewsContent;
+                        }
+                        @contentPreview
+                    </div>
+                    <div class="news-meta">
+                        Published Date: @Html.DisplayFor(modelItem => item.ModifiedDate) | Source: @Html.DisplayFor(modelItem => item.NewsSource) | Category: @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                    </div>
+                    <div class="news-actions">
+                        <a asp-action="Details" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-info">Read More</a>
+                        <a asp-action="Edit" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-danger">Delete</a>
+                    </div>
+                </div>
         }
-    </tbody>
-</table>
+    </div>
+</body>
+</html>

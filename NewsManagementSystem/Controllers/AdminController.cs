@@ -1,18 +1,21 @@
 ﻿using BLL.Interfaces;
 using DAL.Entities;
+using DAL.UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NewsManagementSystem.Controllers
 {
-    [Authorize(Roles = "Admin")]
+   // [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAccountService _accountService;
-
-        public AdminController(IAccountService accountService)
+        private readonly IUnitOfWork _unitOfWork;
+        public AdminController(IAccountService accountService, IUnitOfWork unitOfWork)
         {
             _accountService = accountService;
+            _unitOfWork = unitOfWork;
+
         }
 
         // GET: /Admin/ManageAccounts
@@ -69,18 +72,22 @@ namespace NewsManagementSystem.Controllers
         }
 
         // GET: /Admin/Report
-        public IActionResult Report()
+        public async Task<IActionResult> Report(DateTime startDate, DateTime endDate)
         {
-            return View();
+            var reportData = await _unitOfWork.NewsArticles.GetAllByListAsync(n => n.CreatedDate >= startDate &&
+                                                                                    n.CreatedDate <= endDate);
+            return View(reportData);
+            
         }
 
         // POST: /Admin/GenerateReport
         [HttpPost]
-        public async Task<IActionResult> GenerateReport(DateTime startDate, DateTime endDate)
+        public async Task<IActionResult> GenerateReport()
         {
             // Implement your report creation logic using the DAL and BLL services.
-            var reportData = await Task.FromResult(new object()); // Replace with actual data
-            return View("Report", reportData);
+          /*  var reportData = await _unitOfWork.NewsArticles.GetByConditionAsync(n => n.CreatedDate >= startDate && 
+                                                                                     n.CreatedDate <= endDate); // Replace with actual data*/
+            return View();
         }
     }
 }

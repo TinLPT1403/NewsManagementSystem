@@ -6,6 +6,7 @@ using DAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper;
 
 namespace NewsManagementSystem
 {
@@ -15,7 +16,11 @@ namespace NewsManagementSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
+            var config = new MapperConfiguration(cfg => {
+                cfg.AddMaps(typeof(Program).Assembly); // Or Assembly containing your profiles
+            });
+            var mapper = config.CreateMapper();
+            builder.Services.AddSingleton(mapper);
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
@@ -58,6 +63,7 @@ namespace NewsManagementSystem
             builder.Services.AddScoped<BLL.Interfaces.INewsArticleService, BLL.Services.NewsArticleService>();
             builder.Services.AddScoped<BLL.Interfaces.INewsTagService, BLL.Services.NewsTagService>();
             builder.Services.AddScoped<BLL.Interfaces.ITagService, BLL.Services.TagService>();
+            builder.Services.AddScoped<DAL.Interfaces.INewsArticleRepository, DAL.Repositories.NewsArticleRepository>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthorization(options =>
             {
@@ -68,6 +74,8 @@ namespace NewsManagementSystem
 
 
             var app = builder.Build();
+
+            // Register IMapper as a singleton
 
 
 

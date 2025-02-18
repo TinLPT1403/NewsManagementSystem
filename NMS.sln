@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsManagementSystem", "NewsManagementSystem\NewsManagementSystem.csproj", "{6D331D20-FE63-4946-8BBC-618F41D05FA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsManagementSystem", "NewsManagementSystem\NewsManagementSystem.csproj", "{6D331D20-FE63-4946-8BBC-618F41D05FA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{5B629C25-A10D-44BE-AE98-21BDDF231C2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{5B629C25-A10D-44BE-AE98-21BDDF231C2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{893C28C1-781A-4A21-A2E9-D5C82E91552A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{893C28C1-781A-4A21-A2E9-D5C82E91552A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +30,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B38290D2-D38C-481A-A338-2065227373FD}
 	EndGlobalSection
 EndGlobal

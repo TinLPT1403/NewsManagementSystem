@@ -1,6 +1,7 @@
 ﻿using BLL.DTOs;
 using BLL.Interfaces;
 using DAL.Entities;
+using DAL.Interfaces;
 using DAL.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -16,11 +17,13 @@ namespace BLL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly INewsArticleRepository _newsArticleRepository;
 
-        public NewsArticleService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
+        public NewsArticleService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, INewsArticleRepository newsArticleRepository)
         {
             _unitOfWork = unitOfWork;
             _httpContextAccessor = httpContextAccessor;
+            _newsArticleRepository = newsArticleRepository;
         }
         public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto)
         {
@@ -29,7 +32,7 @@ namespace BLL.Services
             {
                 throw new ArgumentException("Headline is required.");
             }
-            var userId = GetUserFromToken();
+            var userId = 1;
             // Create new article
             var article = new NewsArticle
             {
@@ -85,9 +88,11 @@ namespace BLL.Services
 
         public async Task<NewsArticle> GetNewsArticleAsync(string id) => await _unitOfWork.NewsArticles.GetByIdAsync(id);
 
-        public Task<string?> GetNewsArticlesByUserIdAsync(int userId)
+        public async Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId)
         {
-            throw new NotImplementedException();
+
+           return await _newsArticleRepository.GetNewsArticlesByUserIdAsync(userId);
+            
         }
 
         public async Task UpdateNewsArticleAsync(string id, NewsArticleUpdateDTO dto)

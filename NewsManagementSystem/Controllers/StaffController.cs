@@ -13,18 +13,20 @@ using System.Threading.Tasks;
 
 namespace NewsManagementSystem.Controllers
 {
-    [Authorize(Roles = "Staff")]
+    //[Authorize(Roles = "Staff")]
     public class StaffController : Controller
     {
         private readonly ICategoryService _categoryService;
         private readonly INewsArticleService _newsArticleService;
         private readonly IMapper _mapper;
-
-        public StaffController(ICategoryService categoryService, INewsArticleService newsArticleService, IMapper mapper)
+        private readonly IAccountService _accountService;
+        public StaffController(ICategoryService categoryService, INewsArticleService newsArticleService, IMapper mapper, IAccountService accountService)
         {
             _categoryService = categoryService;
             _newsArticleService = newsArticleService;
             _mapper = mapper;
+            _accountService = accountService;
+
         }
 
         // GET: /Staff/ManageCategories
@@ -142,10 +144,25 @@ namespace NewsManagementSystem.Controllers
         }
 
         // GET: /Staff/MyProfile
-        public IActionResult MyProfile()
+        public async Task<IActionResult>  MyProfile()
         {
-            // Implement logic to get the current user's profile
-            return View();
+            var userId = 1;
+            var user = await _accountService.GetAccountByIdAsync(userId); 
+            return View(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MyProfile(SystemAccount account)
+        {
+           
+
+            if (ModelState.IsValid)
+            {
+                await _accountService.UpdateAccountAsync(account.AccountId, account); 
+                TempData["SuccessMessage"] = "Your profile has been updated successfully!";
+                return RedirectToAction(nameof(MyProfile));
+            }
+            return View(account);
         }
 
         // GET: /Staff/MyNewsHistory
@@ -155,7 +172,7 @@ namespace NewsManagementSystem.Controllers
             var newsHistory = await _newsArticleService.GetNewsArticlesByUserIdAsync(userId);
             return View(newsHistory);
         }
-
+        
         private int GetUserFromToken()
         {
             var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);

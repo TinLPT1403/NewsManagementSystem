@@ -144,7 +144,7 @@ namespace DAL.Extensions
             modelBuilder.Entity<SystemAccount>().HasData(
             new SystemAccount
                 {
-                    AccountId = 1,
+                    AccountId = 1,  
                     AccountName = "Kha UwU",
                     AccountEmail = "admin@example.com",
                     AccountRole = 1, // Assuming 1 represents an admin role

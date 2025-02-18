@@ -10,6 +10,7 @@ using DAL.Entities;
 using BLL.Interfaces;
 using BLL.DTOs;
 using Humanizer;
+using System.Security.Claims;
 
 namespace NewsManagementSystem.Controllers
 {
@@ -31,8 +32,11 @@ namespace NewsManagementSystem.Controllers
         // GET: NewsArticles
         public async Task<IActionResult> Index()
         {
-            return View(await _newsArticleService.GetAllNewsArticlesAsync());
+            var id = 1;  //GetUserFromToken();
+            return View(await _newsArticleService.GetNewsArticlesByUserIdAsync(id));
+
         }
+
 
         // GET: NewsArticles/Details/5
         public async Task<IActionResult> Details(string id)
@@ -56,7 +60,11 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
-            ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName");
+            // Fetch all tags from the service
+            var tags = await _tagService.GetAllTagsAsync();
+
+            // Pass the tags to the view using ViewBag
+            ViewBag.Tags = tags;
             return View();
         }
 
@@ -98,7 +106,11 @@ namespace NewsManagementSystem.Controllers
                 CategoryId = newsArticle.CategoryId,
                 NewsTagIds = newsArticle.NewsTags.Select(t => t.TagId).ToList()
             };
+            // Fetch all tags from the service
+            var tags = await _tagService.GetAllTagsAsync();
 
+            // Pass the tags to the view using ViewBag
+            ViewBag.Tags = tags;
             return View(model);
         }
 
@@ -137,6 +149,16 @@ namespace NewsManagementSystem.Controllers
         {
             await _newsArticleService.DeleteNewsArticleAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+        private int GetUserFromToken()
+        {
+            var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
+
+            return int.Parse(userIdClaim.Value);
         }
     }
 }
