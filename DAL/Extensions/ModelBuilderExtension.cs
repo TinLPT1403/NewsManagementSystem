@@ -141,6 +141,16 @@ namespace DAL.Extensions
                     Note = "Latest trends in artificial intelligence and ML."
                 }
             );
+            modelBuilder.Entity<SystemAccount>().HasData(
+            new SystemAccount
+                {
+                    AccountId = 1,
+                    AccountName = "Kha UwU",
+                    AccountEmail = "admin@example.com",
+                    AccountRole = 1, // Assuming 1 represents an admin role
+                    AccountPassword = "123456" // Ideally, use a hashed password
+                }
+            );
         }
 
     }
