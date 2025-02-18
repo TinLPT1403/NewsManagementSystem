@@ -56,14 +56,15 @@ namespace NewsManagementSystem
             builder.Services.AddScoped<BLL.Interfaces.IAccountService, BLL.Services.AccountService>();
             builder.Services.AddScoped<BLL.Interfaces.ICategoryService, BLL.Services.CategoryService>();
             builder.Services.AddScoped<BLL.Interfaces.INewsArticleService, BLL.Services.NewsArticleService>();
+            builder.Services.AddScoped<BLL.Interfaces.INewsTagService, BLL.Services.NewsTagService>();
+            builder.Services.AddScoped<BLL.Interfaces.ITagService, BLL.Services.TagService>();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Lecturer", policy => policy.RequireRole("Lecturer"));
-                options.AddPolicy("Staff", policy => policy.RequireRole("Staff"));
-                options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("Lecturer", policy => policy.RequireRole("1"));
+                options.AddPolicy("Staff", policy => policy.RequireRole("2"));
+                options.AddPolicy("Admin", policy => policy.RequireRole("3"));
             });
-
 
 
             var app = builder.Build();

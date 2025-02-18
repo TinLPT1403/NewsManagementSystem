@@ -18,12 +18,14 @@ namespace NewsManagementSystem.Controllers
         private readonly INewsArticleService _newsArticleService;
         private readonly ICategoryService _categoryService;
         private readonly INewsTagService _newsTagService;
+        private readonly ITagService _tagService;
 
-        public NewsArticlesController(INewsArticleService newsArticleService, ICategoryService categoryService, INewsTagService newsTagService)
+        public NewsArticlesController(INewsArticleService newsArticleService, ICategoryService categoryService, INewsTagService newsTagService, ITagService tagService)
         {
             _newsArticleService = newsArticleService;
             _categoryService = categoryService;
             _newsTagService = newsTagService;
+            _tagService = tagService;
         }
 
         // GET: NewsArticles
@@ -54,7 +56,7 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> Create()
         {
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
-            //ViewBag.Tags = await _newsTagService.GetAllTags();
+            ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName");
             return View();
         }
 

@@ -44,7 +44,7 @@
     </div>
     <div class="form-group">
         <label asp-for="NewsTagIds" class="control-label">Tags</label>
-        <select asp-for="NewsTagIds" class="form-control" multiple="multiple">
+        <select asp-for="NewsTagIds" class="form-control" asp-items="ViewBag.TagId">
             <!-- Options should be populated dynamically -->
         </select>
         <span asp-validation-for="NewsTagIds" class="text-danger"></span>
