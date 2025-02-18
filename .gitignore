@@ -366,3 +366,11 @@ FodyWeavers.xsd
 /DAL/Migrations/20250216094445_Initial.cs
 /DAL/Migrations/20250216094445_Initial.Designer.cs
 /DAL/Migrations/NewsContextModelSnapshot.cs
+/DAL/Migrations/20250218031114_ffsInit.cs
+/DAL/Migrations/20250218031114_ffsInit.Designer.cs
+/DAL/Migrations/20250218032315_seed1.cs
+/DAL/Migrations/20250215034245_init.cs
+/DAL/Migrations/20250215034245_init.Designer.cs
+/DAL/Migrations/20250218032315_seed1.Designer.cs
+/DAL/Migrations/20250218033557_seed2.cs
+/DAL/Migrations/20250218033557_seed2.Designer.cs

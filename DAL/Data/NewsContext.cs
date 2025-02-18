@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.Entities;
+using DAL.Extensions;
 
 namespace DAL.Data
 {
@@ -20,6 +21,7 @@ namespace DAL.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Seed();
             // Configure Many-to-Many Relationship between NewsArticle and Tag
             modelBuilder.Entity<NewsTag>()
                 .HasKey(nt => new { nt.NewsArticleId, nt.TagId }); // Composite Primary Key
