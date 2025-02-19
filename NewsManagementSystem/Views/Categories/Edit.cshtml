@@ -1,0 +1,150 @@
+﻿@model DAL.Entities.Category
+
+@{
+    ViewData["Title"] = "Edit Category"; // More descriptive title
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reusing and adapting styles from Create Category View for Edit */
+
+    :root {
+        --primary-color: #0056b3;
+        --secondary-color: #6c757d;
+        --background-color: #f8f9fa;
+        --text-color: #343a40;
+        --accent-color: #ffc107;
+        --form-card-background: #ffffff;
+        --form-card-border: #dee2e6;
+        --form-card-border-radius: 8px;
+        --form-label-color: var(--secondary-color);
+        --form-input-border-color: #ced4da;
+        --form-input-focus-border-color: var(--primary-color);
+        --form-input-box-shadow-focus: rgba(0, 86, 179, 0.25);
+        --form-group-margin-bottom: 20px;
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    h4 {
+        color: var(--text-color);
+        margin-bottom: 15px;
+    }
+
+    .edit-category-form-container { /* Container for Edit Category form */
+        max-width: 700px; /* Adjust max width if needed */
+        margin: 20px auto;
+        padding: 30px;
+        background-color: var(--form-card-background);
+        border: 1px solid var(--form-card-border);
+        border-radius: var(--form-card-border-radius);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-group {
+        margin-bottom: var(--form-group-margin-bottom);
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: var(--form-label-color);
+            margin-bottom: 8px;
+        }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--text-color);
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid var(--form-input-border-color);
+        appearance: none;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+        .form-control:focus {
+            color: var(--text-color);
+            background-color: #fff;
+            border-color: var(--form-input-focus-border-color);
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem var(--form-input-box-shadow-focus);
+        }
+
+    .btn-primary {
+        padding: 0.8rem 1.5rem;
+        font-size: 1.1rem;
+        border-radius: 0.3rem;
+    }
+
+    .text-danger {
+        font-size: 0.9rem;
+        margin-top: 4px;
+        display: block;
+    }
+
+</style>
+
+<div class="edit-category-form-container">
+    <h1>Edit Category</h1>
+
+    <h4>Edit Category Details</h4>
+    <hr />
+
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="CategoryId" />
+        <div class="form-group">
+            <label asp-for="CategoryName" class="control-label">Category Name</label>
+            <input asp-for="CategoryName" class="form-control" />
+            <span asp-validation-for="CategoryName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CategoryDescription" class="control-label">Category Description</label>
+            <input asp-for="CategoryDescription" class="form-control" />
+            <span asp-validation-for="CategoryDescription" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="IsActive" class="control-label">Is Active</label>
+            <select asp-for="IsActive" class="form-control">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+            <span asp-validation-for="IsActive" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ParentCategoryId" class="control-label">Parent Category (Optional)</label>
+            <select asp-for="ParentCategoryId" class="form-control" asp-items="ViewBag.ParentCategoryId">
+                <option value="">-- No Parent Category --</option>
+            </select>
+            <span asp-validation-for="ParentCategoryId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save Category" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to Category List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

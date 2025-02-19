@@ -1,0 +1,179 @@
+﻿@model IEnumerable<DAL.Entities.Category>
+
+@{
+    ViewData["Title"] = "News Categories"; // More descriptive title
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Styling for Category Index Page - Visual Card Layout */
+
+    :root {
+        --primary-color: #0056b3;
+        --secondary-color: #6c757d;
+        --background-color: #f8f9fa;
+        --text-color: #343a40;
+        --accent-color: #ffc107;
+        --category-card-background: #ffffff;
+        --category-card-border: #dee2e6;
+        --category-card-border-radius: 8px;
+        --category-card-padding: 20px;
+        --category-card-margin-bottom: 20px;
+        --category-action-color: var(--primary-color);
+        --category-action-hover-color: darken(var(--category-action-color), 10%);
+        --category-label-color: var(--secondary-color);
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .categories-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+        gap: 25px;
+        margin-top: 20px;
+    }
+
+    .category-card {
+        background-color: var(--category-card-background);
+        border: 1px solid var(--category-card-border);
+        border-radius: var(--category-card-border-radius);
+        padding: var(--category-card-padding);
+        margin-bottom: var(--category-card-margin-bottom);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease-in-out; /* Hover effect */
+    }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .category-title {
+        font-size: 1.5em;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+
+    .category-detail {
+        margin-bottom: 8px;
+    }
+
+    .category-label {
+        font-weight: bold;
+        color: var(--category-label-color);
+        margin-right: 5px;
+    }
+
+    .category-actions {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+        .category-actions a {
+            color: var(--category-action-color);
+            text-decoration: none;
+            margin-left: 10px;
+            padding: 8px 12px;
+            border: 1px solid var(--category-action-color);
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            display: inline-block; /* Ensure actions are on one line */
+        }
+
+            .category-actions a:hover {
+                background-color: var(--category-action-color);
+                color: white;
+            }
+
+    .create-new-link {
+        display: block;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+        .create-new-link a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+
+            .create-new-link a:hover {
+                background-color: darken(var(--primary-color), 10%);
+            }
+
+    .is-active-indicator {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        font-weight: bold;
+        margin-left: 5px;
+    }
+
+    .is-active-true {
+        background-color: #28a745; /* Green for active */
+        color: white;
+    }
+
+    .is-active-false {
+        background-color: #dc3545; /* Red for inactive */
+        color: white;
+    }
+
+</style>
+
+<h1>News Categories</h1>
+
+<p class="create-new-link">
+    <a asp-action="Create">Create New Category</a>
+</p>
+
+<div class="categories-container">
+    @foreach (var item in Model)
+    {
+        <div class="category-card">
+            <h2 class="category-title">
+                @Html.DisplayFor(modelItem => item.CategoryName)
+                @if (item.IsActive == true) // 
+                {
+                    <span class="is-active-indicator is-active-true">Active</span>
+                }
+                else
+                {
+                    <span class="is-active-indicator is-active-false">Inactive</span>
+                }
+            </h2>
+
+            <div class="category-detail">
+                <span class="category-label">Description:</span>
+                @Html.DisplayFor(modelItem => item.CategoryDescription)
+            </div>
+
+            <div class="category-detail">
+                <span class="category-label">Parent Category:</span>
+                @Html.DisplayFor(modelItem => item.ParentCategory.CategoryDescription)
+            </div>
+
+
+            <div class="category-actions">
+                <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+            </div>
+        </div>
+    }
+</div>

@@ -1,11 +1,130 @@
 ﻿@model DAL.Entities.SystemAccount
 
 @{
-    ViewData["Title"] = "DeleteAccount";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Delete Account";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>DeleteAccount</h1>
+<style>
+    /* Styling for Delete System Account Confirmation - Stylish Look */
+
+    /* Theme Variables - Consistent with other admin pages */
+    :root {
+        --primary-color: #0056b3;
+        --secondary-color: #6c757d;
+        --background-color: #f8f9fa;
+        --text-color: #343a40;
+        --accent-color: #ffc107;
+        --delete-card-background: #ffffff; /* Background for delete confirmation card */
+        --delete-card-border: #dee2e6;
+        --delete-card-border-radius: 8px;
+        --delete-card-padding: 30px;
+        --delete-page-max-width: 700px;
+        --detail-label-color: var(--secondary-color);
+        --delete-button-color: #dc3545; /* Bootstrap danger color */
+        --delete-button-hover-color: darken(#dc3545, 10%);
+        --action-link-color: var(--secondary-color);
+        --action-link-hover-color: darken(var(--secondary-color), 20%);
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .delete-account-container {
+        max-width: var(--delete-page-max-width);
+        margin: 30px auto;
+        padding: var(--delete-card-padding);
+        background-color: var(--delete-card-background);
+        border: 1px solid var(--delete-card-border);
+        border-radius: var(--delete-card-border-radius);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09); /* Enhanced shadow */
+    }
+
+    h1 {
+        color: var(--delete-button-color); /* Heading in danger color to emphasize delete */
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    h3 {
+        color: var(--text-color);
+        text-align: center;
+        margin-bottom: 25px;
+        font-weight: normal;
+    }
+
+    h4 {
+        color: var(--text-color);
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--delete-card-border);
+        padding-bottom: 15px;
+    }
+
+    dl.row > dt {
+        font-weight: bold;
+        color: var(--detail-label-color);
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    dl.row > dd {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        color: var(--text-color);
+    }
+
+        dl.row > dt:not(:first-child),
+        dl.row > dd:not(:first-child) {
+            border-top: 1px solid var(--delete-card-border);
+        }
+
+
+    .delete-confirmation-actions {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .btn-delete {
+        padding: 0.9rem 2rem;
+        font-size: 1.1rem;
+        border-radius: 0.3rem;
+        background-color: var(--delete-button-color);
+        border-color: var(--delete-button-color);
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    }
+
+        .btn-delete:hover {
+            background-color: var(--delete-button-hover-color);
+            border-color: var(--delete-button-hover-color);
+        }
+
+    .back-to-list-link {
+        display: inline-block;
+        margin-left: 15px;
+        padding: 0.9rem 1.5rem;
+        font-size: 1.1rem;
+        border-radius: 0.3rem;
+        color: var(--action-link-color);
+        text-decoration: none;
+        border: 1px solid var(--delete-card-border); /* Light border */
+        transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    }
+
+        .back-to-list-link:hover {
+            color: var(--action-link-hover-color);
+            border-color: var(--action-link-hover-color);
+            background-color: #f0f0f0; /* Light background on hover */
+        }
+</style>
+
+<div class="delete-account-container">
+    <h1>Delete Account</h1>
+    <h3>Are you sure you want to delete this account?</h3>
 
 @if (TempData["Message"] != null)
 {
@@ -18,38 +137,51 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>SystemAccount</h4>
+    <h4>Account Details</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AccountName)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AccountName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AccountEmail)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AccountEmail)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AccountRole)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AccountRole)
+        <dd class="col-sm-10">
+            @if (Model.AccountRole == 1)
+            {
+                <span>Staff</span>
+            }
+            else if (Model.AccountRole == 2)
+            {
+                <span>Lecturer</span>
+            }
+            else
+            {
+                @Html.DisplayFor(model => model.AccountRole)
+            }
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AccountPassword)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AccountPassword)
+        <dd class="col-sm-10">
+            ********
         </dd>
     </dl>
 
-    <form asp-action="Delete" asp-route-id="@Model.AccountId" method="post">
-        <input type="hidden" asp-for="AccountId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    <div class="delete-confirmation-actions">
+        <form asp-action="DeleteAccount" asp-route-id="@Model.AccountId" method="post">
+            <input type="hidden" asp-for="AccountId" />
+            <input type="submit" value="Delete Account" class="btn-delete" />
+            <a asp-action="ManageAccounts" class="back-to-list-link">Back to Account List</a>
+        </form>
+    </div>
 </div>

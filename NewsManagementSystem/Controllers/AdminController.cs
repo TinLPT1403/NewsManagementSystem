@@ -25,6 +25,13 @@ namespace NewsManagementSystem.Controllers
             return View(accounts);
         }
 
+        public async Task<IActionResult> DetailsAccount(int id) 
+        { 
+        
+            var account = await _accountService.GetAccountByIdAsync(id);
+            if (account == null) return NotFound();
+            return View(account);
+        }
         // GET: /Admin/CreateAccount
         public IActionResult CreateAccount()
         {
