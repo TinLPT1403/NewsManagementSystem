@@ -38,8 +38,10 @@ namespace NewsManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 await _accountService.CreateAccountAsync(account);
+                TempData["Message"] = "Account created successfully.";
                 return RedirectToAction(nameof(ManageAccounts));
             }
+            TempData["Error"] = "Failed to create account.";
             return View(account);
         }
 
@@ -58,8 +60,10 @@ namespace NewsManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 await _accountService.UpdateAccountAsync(id, account);
+                TempData["Message"] = "Account updated successfully.";
                 return RedirectToAction(nameof(ManageAccounts));
             }
+            TempData["Error"] = "Failed to update account.";
             return View(account);
         }
         public async Task<IActionResult> DeleteAccount(int id)
@@ -76,10 +80,8 @@ namespace NewsManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            Console.WriteLine(id);
-            Console.WriteLine("Delete");
             await _accountService.DeleteAccountAsync(id);
-            
+            TempData["Message"] = "Account deleted successfully.";
             return RedirectToAction(nameof(ManageAccounts));
         }
 
@@ -100,6 +102,28 @@ namespace NewsManagementSystem.Controllers
           /*  var reportData = await _unitOfWork.NewsArticles.GetByConditionAsync(n => n.CreatedDate >= startDate && 
                                                                                      n.CreatedDate <= endDate); // Replace with actual data*/
             return View();
+        }
+
+        // GET: /Admin/SearchAccount
+        public async Task<IActionResult> SearchAccount(string searchTerm)
+        {
+            if (string.IsNullOrEmpty(searchTerm))
+            {
+                TempData["Error"] = "Search term cannot be empty.";
+                return RedirectToAction(nameof(ManageAccounts));
+            }
+
+            var accounts = await _accountService.GetAllAccountsAsync();
+            var filteredAccounts = accounts.Where(a => a.AccountName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                                       a.AccountEmail.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (!filteredAccounts.Any())
+            {
+                TempData["Error"] = "No accounts found matching the search term.";
+                return RedirectToAction(nameof(ManageAccounts));
+            }
+
+            return View("ManageAccounts", filteredAccounts);
         }
     }
 }

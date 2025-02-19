@@ -7,6 +7,15 @@
 
 <h1>EditAccount</h1>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <h4>SystemAccount</h4>
 <hr />
 <div class="row">
