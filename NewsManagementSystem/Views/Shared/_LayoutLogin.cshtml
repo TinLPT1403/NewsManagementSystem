@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - News Management System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/NewsManagementSystem.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <style>
+        /* Custom Styles for a more Stunning Layout */
+        :root {
+            --primary-color: #0056b3; /* Darker Primary Blue */
+            --secondary-color: #6c757d;
+            --background-color: #f8f9fa;
+            --text-color: #343a40;
+            --accent-color: #ffc107; /* Still using yellow for warnings, but can change */
+            --navbar-bg: var(--primary-color); /* Navbar background is now primary */
+            --navbar-text-color: white; /* Text on navbar is white */
+            --navbar-brand-color: white; /* Brand color white */
+            --footer-bg: #343a40; /* Darker footer background */
+            --footer-text-color: #e0e0e0; /* Lighter footer text */
+            --link-hover-color: #007bff; /* Standard hover color */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--navbar-bg) !important; /* Overriding Bootstrap bg-white */
+            padding-top: 0.7rem;
+            padding-bottom: 0.7rem;
+        }
+
+        .navbar-brand {
+            color: var(--navbar-brand-color) !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .navbar-toggler-icon {
+            background-color: var(--navbar-text-color); /* Make toggler icon visible on dark navbar */
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--navbar-text-color) !important;
+            padding: 0.5rem 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+            .navbar-nav .nav-link:hover,
+            .navbar-nav .nav-link:focus {
+                background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+                color: var(--navbar-brand-color) !important; /* keep text white/brand color on hover */
+            }
+
+        /*  Active nav link - if you want to highlight the active page */
+        .navbar-nav .nav-item.active .nav-link {
+            font-weight: bold; /* Make active link bolder */
+            /* You could also add background or different text color here */
+        }
+
+
+        /* Main Container */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex; /* Enable flexbox on the body */
+            flex-direction: column; /* Stack body content vertically */
+            min-height: 100vh; /* Ensure body is at least the height of the viewport */
+        }
+
+        .container {
+            margin-top: 20px;
+            flex: 1; /* Allow container to grow and take available space */
+        }
+
+        .footer {
+            background-color: var(--footer-bg);
+            color: var(--footer-text-color);
+            text-align: center;
+            margin-top: auto; /* Push footer to the bottom */
+        }
+        /* Enhance links in general */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            a:hover, a:focus {
+                color: var(--link-hover-color);
+                text-decoration: underline;
+            }
+
+
+        /* Button styles - adjust if needed to match new theme */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+            .btn-primary:hover {
+                background-color: #00428a; /* Darken on hover */
+                border-color: #00428a;
+            }
+
+        /* ... (Keep other button styles from previous example or adjust to your theme) ... */
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    <i class="fas fa-newspaper"></i> News Management System
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="Account" asp-action="Register">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2025 - NewsManagementSystem - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

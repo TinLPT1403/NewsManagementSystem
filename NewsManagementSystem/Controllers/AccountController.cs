@@ -1,4 +1,5 @@
 ﻿using BLL.Interfaces;
+using DAL.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,7 +49,23 @@ namespace NewsManagementSystem.Controllers
 
             return RedirectToAction("Index", "NewsArticles");
         }
+        // GET: /Admin/CreateAccount
+        public IActionResult Register()
+        {
+            return View();
+        }
 
+        // POST: /Admin/CreateAccount
+        [HttpPost]
+        public async Task<IActionResult> Register(SystemAccount account)
+        {
+            if (ModelState.IsValid)
+            {
+                await _accountService.CreateAccountAsync(account);
+                return RedirectToAction(nameof(Login));
+            }
+            return View(account);
+        }
 
 
         // GET: /Account/Logout
