@@ -6,6 +6,7 @@ using DAL.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -27,12 +28,20 @@ namespace BLL.Services
         }
         public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto)
         {
+            var userId = GetUserFromToken();
+            Console.WriteLine("UserId: " + userId);
+            var user = await _unitOfWork.SystemAccounts.GetByIdAsync(userId); // Fetch user by ID
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User not found.");
+            }
+
             // Ensure required fields are not empty
             if (string.IsNullOrWhiteSpace(dto.Headline))
             {
                 throw new ArgumentException("Headline is required.");
             }
-            var userId = GetUserFromToken();
+
             // Create new article
             var article = new NewsArticle
             {
@@ -75,7 +84,7 @@ namespace BLL.Services
         public async Task DeactiveNewsArticleAsync(string id)
         {
             var article = await _unitOfWork.NewsArticles.GetByIdAsync(id);
-            if(article != null)
+            if (article != null)
             {
                 article.NewsStatus = false;
                 await _unitOfWork.NewsArticles.UpdateAsync(article);
@@ -91,8 +100,8 @@ namespace BLL.Services
         public async Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId)
         {
 
-           return await _newsArticleRepository.GetActiveNewsArticlesByUserIdAsync(userId);
-            
+            return await _newsArticleRepository.GetActiveNewsArticlesByUserIdAsync(userId);
+
         }
 
         public async Task UpdateNewsArticleAsync(string id, NewsArticleUpdateDTO dto)
@@ -186,15 +195,24 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        private int GetUserFromToken()
+        private int? GetUserFromToken()
         {
-            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
+            // Retrieve token from the cookie
+            var token = _httpContextAccessor.HttpContext?.Request.Cookies["JwtToken"];
+            if (string.IsNullOrEmpty(token))
             {
-                throw new UnauthorizedAccessException("User is not authenticated.");
+                return null;
             }
 
-            return int.Parse(userIdClaim.Value);
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userIdClaim = jwtToken?.Claims.FirstOrDefault(c => c.Type == "NameIdentifier" || c.Type == "nameid");
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return userId;
+            }
+            return null;
         }
+
     }
 }

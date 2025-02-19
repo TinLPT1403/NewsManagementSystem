@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using DAL.Interfaces;
+using DAL.Repositories;
 
 namespace NewsManagementSystem
 {
@@ -17,61 +19,54 @@ namespace NewsManagementSystem
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var config = new MapperConfiguration(cfg => {
+            var config = new MapperConfiguration(cfg =>
+            {
                 cfg.AddMaps(typeof(Program).Assembly); // Or Assembly containing your profiles
             });
             var mapper = config.CreateMapper();
             builder.Services.AddSingleton(mapper);
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             //builder.Services.AddRazorPages();
 
             builder.Services.AddDbContext<NewsContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            //JWT token
 
-            var key = Encoding.ASCII.GetBytes("ilovecat");
+            // Initialize TokenService with configuration
+            TokenService.Initialize(builder.Configuration);
+
+            // Cookie authentication
+            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options =>
+            //    {
+            //        options.LoginPath = "/Account/Login";
+            //        options.LogoutPath = "/Account/Logout";
+            //        options.AccessDeniedPath = "/Account/AccessDenied";
+            //    });
+
+            // JWT token authentication for API endpoints (optional)
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            })
+            .AddJwtBearer(options =>
             {
+                var secretKey = builder.Configuration["Jwt:Secret"]; // Get JWT Secret Key
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = "ilovecat.com",
-                    ValidAudience = "ilovecat.com",
-                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    ClockSkew = TimeSpan.Zero // Reduce default clock skew for testing
                 };
-
             });
-            //register service
-            // Register the DbContext (adjust options as needed)
 
-            // Register IUnitOfWork and its implementation
-            builder.Services.AddScoped<DAL.UnitOfWork.IUnitOfWork, DAL.UnitOfWork.UnitOfWork>();
-
-            // Existing registrations
-            builder.Services.AddScoped<BLL.Interfaces.IAccountService, BLL.Services.AccountService>();
-            builder.Services.AddScoped<BLL.Interfaces.ICategoryService, BLL.Services.CategoryService>();
-            builder.Services.AddScoped<BLL.Interfaces.INewsArticleService, BLL.Services.NewsArticleService>();
-            builder.Services.AddScoped<BLL.Interfaces.INewsTagService, BLL.Services.NewsTagService>();
-            builder.Services.AddScoped<BLL.Interfaces.ITagService, BLL.Services.TagService>();
-            builder.Services.AddScoped<DAL.Interfaces.INewsArticleRepository, DAL.Repositories.NewsArticleRepository>();
-            builder.Services.AddHttpContextAccessor();
-            // Register cookie authentication
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    // Specify the paths for login, logout, and access denied as needed.
-                    options.LoginPath = "/Account/Login";
-                    options.LogoutPath = "/Account/Logout";
-                    options.AccessDeniedPath = "/Account/AccessDenied";
-                });
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Lecturer", policy => policy.RequireRole("1"));
@@ -79,19 +74,29 @@ namespace NewsManagementSystem
                 options.AddPolicy("Admin", policy => policy.RequireRole("3"));
             });
 
+            // Register services
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<INewsArticleService, NewsArticleService>();
+            builder.Services.AddScoped<INewsTagService, NewsTagService>();
+            builder.Services.AddScoped<ITagService, TagService>();
+            builder.Services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
+            builder.Services.AddHttpContextAccessor();
+
+            // Add session services
+            builder.Services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;  // Ensure that the cookie is accessible via HTTP only (increased security)
+                options.Cookie.IsEssential = true;  // Make the cookie essential for the application
+            });
 
             var app = builder.Build();
-
-            // Register IMapper as a singleton
-
-
-
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -100,15 +105,26 @@ namespace NewsManagementSystem
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            // Use session before authentication
+            app.UseSession();  // Make sure session middleware is before authentication
 
+            // Middleware to add the JWT token to the request header (for APIs)
+            app.Use(async (context, next) =>
+            {
+                var token = context.Request.Cookies["JwtToken"];
+                if (!string.IsNullOrEmpty(token))
+                {
+                    context.Request.Headers.Add("Authorization", "Bearer " + token);
+                }
+                await next();
+            });
+
+            app.UseAuthentication(); // Use authentication after session
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Account}/{action=Login}/{id?}");
-
-            //app.MapRazorPages()
 
             app.Run();
         }

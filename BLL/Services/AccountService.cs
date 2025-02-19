@@ -39,25 +39,13 @@ namespace BLL.Services
                 _ => string.Empty
             };
             if (string.IsNullOrEmpty(role)) return null;
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Name, email));
+            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()));
 
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(ClaimTypes.Name, email),
-                    new Claim(ClaimTypes.Role, role),
-                    new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()) // Add user ID claim
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var token = TokenService.GenerateToken(claims);
+            return token;
         }
 
         public async Task<IEnumerable<SystemAccount>> GetAllAccountsAsync()

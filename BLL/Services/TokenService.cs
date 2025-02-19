@@ -10,30 +10,27 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    public class TokenService
+    public static class TokenService
     {
-        private readonly string _secret;
-        private readonly string _issuer;
-        private readonly string _audience;
+        private static string _secret;
+        private static string _issuer;
+        private static string _audience;
 
-        public TokenService(IConfiguration configuration)
+        public static void Initialize(IConfiguration configuration)
         {
             _secret = configuration["Jwt:Secret"];
             _issuer = configuration["Jwt:Issuer"];
             _audience = configuration["Jwt:Audience"];
         }
 
-        public string GenerateToken(string username, string role)
+        // Static method to generate token
+        public static string GenerateToken(List<Claim> claims)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                new Claim(ClaimTypes.Name, username),
-                new Claim(ClaimTypes.Role, role)
-            }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = _issuer,
                 Audience = _audience,
