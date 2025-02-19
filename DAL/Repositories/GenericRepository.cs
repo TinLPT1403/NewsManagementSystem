@@ -127,5 +127,10 @@ namespace DAL.Repositories
         {
             return await _dbSet.FindAsync(id);
         }
+
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
     }
 }

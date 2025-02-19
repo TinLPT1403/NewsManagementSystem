@@ -1,11 +1,11 @@
 ﻿@model DAL.Entities.SystemAccount
 
 @{
-    ViewData["Title"] = "Delete";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "DeleteAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
+<h1>DeleteAccount</h1>
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
@@ -37,8 +37,8 @@
             @Html.DisplayFor(model => model.AccountPassword)
         </dd>
     </dl>
-    
-    <form asp-action="Delete">
+
+    <form asp-action="Delete" asp-route-id="@Model.AccountId" method="post">
         <input type="hidden" asp-for="AccountId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>

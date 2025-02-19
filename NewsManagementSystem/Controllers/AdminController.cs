@@ -62,12 +62,24 @@ namespace NewsManagementSystem.Controllers
             }
             return View(account);
         }
-
-        // POST: /Admin/DeleteAccount/{id}
-        [HttpPost]
         public async Task<IActionResult> DeleteAccount(int id)
         {
+            var account = await _accountService.GetAccountByIdAsync(id);
+            if (account == null) return NotFound();
+            return View(account);
+        }
+
+
+
+        // POST: /Admin/DeleteAccount/{id}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            Console.WriteLine(id);
+            Console.WriteLine("Delete");
             await _accountService.DeleteAccountAsync(id);
+            
             return RedirectToAction(nameof(ManageAccounts));
         }
 

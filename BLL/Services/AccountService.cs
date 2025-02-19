@@ -92,10 +92,10 @@ namespace BLL.Services
 
         public async Task DeleteAccountAsync(int id)
         {
-            var account = await _unitOfWork.SystemAccounts.GetByIdAsync(id);
+            var account = await _unitOfWork.SystemAccounts.FirstOrDefaultAsync(a => a.AccountId == id);
             if (account == null) throw new KeyNotFoundException("Account not found.");
 
-            await _unitOfWork.SystemAccounts.DeleteAsync(account);
+            _unitOfWork.SystemAccounts.Delete(account);
             await _unitOfWork.SaveChangesAsync();
         }
     }

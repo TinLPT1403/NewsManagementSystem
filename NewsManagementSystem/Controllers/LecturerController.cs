@@ -22,9 +22,21 @@ namespace NewsManagementSystem.Controllers
         }
 
         // GET: LecturerController/Details/5
-        public ActionResult Details(int id)
+             public async Task<IActionResult> Details(string id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var newsArticle = await _newsArticleService.GetNewsArticleByIdAsync(id);
+
+            if (newsArticle == null)
+            {
+                return NotFound();
+            }
+
+            return View(newsArticle);
         }
 
         // GET: LecturerController/Create

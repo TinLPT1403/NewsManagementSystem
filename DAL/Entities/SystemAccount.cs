@@ -19,6 +19,7 @@ namespace DAL.Entities
         public required int AccountRole { get; set; }
         public required string AccountPassword { get; set; }
 
+
         public virtual ICollection<NewsArticle> CreatedArticles { get; set; } = new List<NewsArticle>(); // Reverse navigation
         public virtual ICollection<NewsArticle> UpdatedArticles { get; set; } = new List<NewsArticle>(); // Reverse navigation
 

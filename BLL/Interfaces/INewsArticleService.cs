@@ -16,5 +16,6 @@ namespace BLL.Interfaces
         Task<NewsArticle> GetNewsArticleByIdAsync(string id);
         Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync();
         Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId);
+
     }
 }

@@ -167,7 +167,7 @@
             <div class="account-actions">
                 <a asp-action="EditAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-warning">Edit</a>
                 <a asp-action="DetailsAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-info">Details</a>
-                <button class="btn btn-sm btn-danger" onclick="location.href='@Url.Action("DeleteAccount", "Admin", new { id = item.AccountId })'">Delete</button>
+                <a asp-action="DeleteAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-danger">Delete</a>
             </div>
         </div>
     }

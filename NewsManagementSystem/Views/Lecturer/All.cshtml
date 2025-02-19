@@ -102,7 +102,7 @@
                 @Html.Raw(item.NewsContent.Length > 200 ? item.NewsContent.Substring(0, 200) + "..." : item.NewsContent)
             </div>
             <div class="article-actions">
-                <a asp-action="Details" asp-controller="NewsArticles" asp-route-id="@item.NewsArticleId" class="btn btn-primary btn-sm">Read More</a>
+                <a asp-action="Details" asp-controller="Lecturer" asp-route-id="@item.NewsArticleId" class="btn btn-primary btn-sm">Read More</a>
                
             </div>
         </div>

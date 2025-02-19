@@ -30,5 +30,7 @@ namespace DAL.Interfaces
         Task<T> GetByConditionAsync(Expression<Func<T, bool>> expression);
         Task<List<T>> ToListAsync();
 
+        Task<T> GetByIdAsync(int id);
+
     }
 }

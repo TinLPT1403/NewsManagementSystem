@@ -45,5 +45,14 @@ namespace DAL.Repositories
                 .ToListAsync();
         }
 
+        public async Task<NewsArticle> GetNewsArticleByIdAsync(string id)
+        {
+            return await newsContext.NewsArticles
+                .Include(article => article.Category)   // Include Category to access CategoryDescription
+                .Include(article => article.CreatedBy)  // Include CreatedBy to access AccountId
+                .Include(article => article.UpdatedBy)  // Include UpdatedBy to access AccountId
+                .FirstOrDefaultAsync(article => article.NewsArticleId == id);
+        }
+
     }
 }
