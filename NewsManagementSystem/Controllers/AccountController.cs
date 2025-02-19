@@ -25,36 +25,61 @@ namespace NewsManagementSystem.Controllers
             _userUtils = userUtils;
         }
         // GET: /Account/Login
-        public IActionResult Login() => View();
+        public IActionResult Login()
+        {
+            // Force clear the authentication token
+            Response.Cookies.Delete("JwtToken");
+
+            // Clear any authentication context
+            HttpContext.SignOutAsync();
+            // Add cache control headers to prevent browser caching
+            Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
+            Response.Headers.Add("Pragma", "no-cache");
+            Response.Headers.Add("Expires", "0");
+
+            return View();
+        }
+
 
         // POST: /Account/Login
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+            Response.Cookies.Delete("JwtToken");
             // Get the JWT token
             var token = await _accountService.AuthenticateAsync(email, password);
             if (token == null)
             {
                 return Unauthorized();
             }
-            var user = await _accountService.GetAccountByIdAsync(_userUtils.GetUserFromToken());
-            // Store the JWT in a secure HttpOnly cookie
+
+            // Define cookie options for the new token
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,  // Only accessible by the server-side (for security)
                 Secure = true,    // Only send the cookie over HTTPS (for security)
                 SameSite = SameSiteMode.Strict,  // Prevent CSRF attacks
-                Expires = DateTime.UtcNow.AddHours(1)  // Set expiration time
+                Expires = DateTime.UtcNow.AddHours(1)  // Set expiration time for the new token
             };
 
-            // Store token in a cookie
+            // Retrieve user account details after authentication
+            var user = await _accountService.GetAccountByIdAsync(_userUtils.GetUserFromInputToken(token));
+
+
+
+            // Store the new token in a cookie
             Response.Cookies.Append("JwtToken", token, cookieOptions);
-            var role = user.AccountRole;
+
+            // Use the role from the user object directly instead of fetching it from the old token
+            int role = user.AccountRole;
+            Console.WriteLine("ROLE IS :" + role);
+
+            // Redirect based on the user's role
             return role switch
             {
-                1 => RedirectToAction("ManageAccounts", "Admin"),
-                2 => RedirectToAction("Index", "Categories"),
-                3 => RedirectToAction("All", "Lecturer"),
+                3 => RedirectToAction("ManageAccounts", "Admin"),
+                1 => RedirectToAction("Index", "Categories"),
+                2 => RedirectToAction("All", "Lecturer"),
                 _ => RedirectToAction("Index", "NewsArticles") // Default fallback
             };
         }

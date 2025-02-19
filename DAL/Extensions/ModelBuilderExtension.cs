@@ -147,7 +147,7 @@ namespace DAL.Extensions
                     AccountId = -1,
                     AccountName = "Kha UwU",
                     AccountEmail = "admin@example.com",
-                    AccountRole = 1, // Assuming 1 represents an admin role
+                    AccountRole = 3, // Assuming 3 represents an admin role
                     AccountPassword = "123456" // Ideally, use a hashed password
                 }
             );
@@ -168,7 +168,7 @@ namespace DAL.Extensions
                     AccountId = -3,
                     AccountName = "Larry",
                     AccountEmail = "staff@example.com",
-                    AccountRole = 3, 
+                    AccountRole = 1, 
                     AccountPassword = "123456" 
                 }
             );

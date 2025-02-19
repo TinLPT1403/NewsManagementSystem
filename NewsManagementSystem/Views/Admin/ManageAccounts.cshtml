@@ -181,6 +181,11 @@
                 {
                     <span>Lecturer</span>
                 }
+                else if (item.AccountRole == 3)
+                {
+                    <span>Admin</span>
+                }
+
                 else
                 {
                     @Html.DisplayFor(modelItem => item.AccountRole)

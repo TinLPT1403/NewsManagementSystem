@@ -36,6 +36,24 @@ namespace BLL.Utils
             return -1;
         }
 
+        public int GetUserFromInputToken(string token)
+        {
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return -1;
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userIdClaim = jwtToken?.Claims.FirstOrDefault(c => c.Type == "NameIdentifier" || c.Type == "nameid");
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return userId;
+            }
+            return -1;
+        }
+
         public string GetRoleFromToken()
         {
             var token = _httpContextAccessor.HttpContext?.Request.Cookies["JwtToken"];
