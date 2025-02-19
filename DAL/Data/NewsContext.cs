@@ -57,6 +57,12 @@ namespace DAL.Data
                 .WithMany(a => a.UpdatedArticles)
                 .HasForeignKey(n => n.UpdatedById)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SystemAccount>()
+                .HasIndex(a => a.AccountEmail)
+                .IsUnique(); // Email must be unique
+
+            
         }
     }
 }

@@ -2,8 +2,8 @@
 
 @{
     ViewData["Title"] = "News Details"; // More reader-focused title
-    Layout = "~/Views/Shared/_Layout.cshtml"; // Assuming you fixed _Layout.cshtml to not have navbar
-}
+    Layout = "~/Views/Shared/_LayoutLecturer.cshtml"; // Assuming you fixed _Layout.cshtml to not have navbar
+}   
 
 <style>
     /* Styling for News Details Page - Reader-Friendly Focus */
@@ -101,7 +101,6 @@
     </div>
 
     <div class="action-buttons">
-        <a asp-action="Edit" asp-route-id="@Model?.NewsArticleId" class="btn btn-warning">Edit</a>
-        <a asp-action="Index" asp-controller="NewsArticles" class="btn btn-secondary">Back to News List</a> @* Adjusted Back to List link *@
+        <a asp-action="All" asp-controller="Lecturer" class="btn btn-secondary">Back to News List</a> @* Adjusted Back to List link *@
     </div>
 </div>

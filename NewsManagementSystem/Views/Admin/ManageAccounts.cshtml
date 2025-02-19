@@ -1,54 +1,174 @@
 ﻿@model IEnumerable<DAL.Entities.SystemAccount>
 
 @{
-    ViewData["Title"] = "ManageAccounts";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Accounts";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Index</h1>
+<style>
+    /* Reusing some styles from News Article page, and adding specific account styles */
 
-<p>
-    <a asp-action="Create">Create New</a>
+    /* Theme Variables - Consistent with News page theme */
+    :root {
+        --primary-color: #007bff;
+        --secondary-color: #6c757d;
+        --background-color: #f8f9fa;
+        --text-color: #343a40;
+        --accent-color: #ffc107;
+        --article-background: #ffffff; /* Reusing article background for account containers */
+        --article-border: #dee2e6; /* Reusing article border */
+        --meta-color: #6c757d; /* Reusing meta color */
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text-color);
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+        .btn-primary:hover {
+            background-color: darken(var(--primary-color), 10%);
+            border-color: darken(var(--primary-color), 10%);
+        }
+
+    .btn-warning {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: var(--text-color);
+    }
+
+        .btn-warning:hover {
+            background-color: darken(var(--accent-color), 10%);
+            border-color: darken(var(--accent-color), 10%);
+        }
+
+    .btn-info {
+        background-color: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+
+        .btn-info:hover {
+            background-color: darken(var(--secondary-color), 10%);
+            border-color: darken(var(--secondary-color), 10%);
+        }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+        .btn-danger:hover {
+            background-color: darken(#dc3545, 10%);
+            border-color: darken(#dc3545, 10%);
+        }
+
+    .accounts-container {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .account-item { /* Renamed from news-article to account-item */
+        border: 1px solid var(--article-border);
+        margin-bottom: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        background-color: var(--article-background);
+    }
+
+        .account-item h2 { /* Style for Account Name */
+            margin-top: 0;
+            margin-bottom: 5px; /* Reduced margin */
+            color: var(--text-color);
+            font-size: 1.7em; /* Slightly larger for names */
+        }
+
+        .account-item h4 { /* Style for Account Role (using h4 for visual hierarchy) */
+            margin-top: 0;
+            margin-bottom: 10px; /* Reduced margin */
+            color: var(--secondary-color);
+            font-size: 1.1em; /* Slightly smaller than Headline from News page */
+        }
+
+    .account-meta { /* For Email and Password - using a meta style class */
+        font-size: 0.9em;
+        color: var(--meta-color);
+        margin-bottom: 8px; /* Reduced margin */
+    }
+
+    .account-actions { /* Actions for each account - consistent naming */
+        text-align: right;
+        margin-top: 15px; /* Add some space above actions */
+    }
+
+        .account-actions a {
+            margin-left: 5px;
+        }
+
+    .create-new-button {
+        margin-bottom: 20px;
+    }
+
+</style>
+
+@section Scripts {
+    <script>
+        function togglePasswordVisibility(accountId) {
+            var passwordSpan = document.getElementById('password-' + accountId);
+            var passwordButton = document.getElementById('show-password-btn-' + accountId);
+            var hiddenPassword = passwordSpan.getAttribute('data-hidden-password');
+
+            if (passwordSpan.textContent === '********') { // Placeholder text
+                passwordSpan.textContent = hiddenPassword;
+                passwordButton.textContent = 'Hide Password';
+            } else {
+                passwordSpan.textContent = '********'; // Back to placeholder
+                passwordButton.textContent = 'Show Password';
+            }
+        }
+    </script>
+}
+
+<h1>Manage System Accounts</h1>
+
+<p class="create-new-button">
+    <a asp-action="CreateAccount" class="btn btn-primary">Create New Account</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountEmail)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountRole)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.AccountPassword)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
+
+<div class="accounts-container">
+    @foreach (var item in Model)
+    {
+        <div class="account-item">
+            <h2>
                 @Html.DisplayFor(modelItem => item.AccountName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountEmail)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountRole)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccountPassword)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.AccountId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.AccountId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.AccountId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+            </h2>
+            <h4>
+                Role: @Html.DisplayFor(modelItem => item.AccountRole)
+            </h4>
+            <div class="account-meta">
+                Email: @Html.DisplayFor(modelItem => item.AccountEmail)
+            </div>
+            <div class="account-meta">
+                Password:
+                <span id="password-@item.AccountId" data-hidden-password="@item.AccountPassword">********</span>
+                <button id="show-password-btn-@item.AccountId" type="button" class="btn btn-sm btn-outline-secondary" onclick="togglePasswordVisibility('@item.AccountId')">Show Password</button>
+                <small>(Click "Show Password" to view)</small>
+            </div>
+
+            <div class="account-actions">
+                <a asp-action="EditAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-warning">Edit</a>
+                <a asp-action="DetailsAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-info">Details</a>
+                <button class="btn btn-sm btn-danger" onclick="location.href='@Url.Action("DeleteAccount", "Admin", new { id = item.AccountId })'">Delete</button>
+            </div>
+        </div>
+    }
+</div>
