@@ -71,8 +71,8 @@ namespace NewsManagementSystem.Controllers
         // GET: /Account/Logout
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "News");
+           // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Account");
         }
 
         private async Task<string> ValidateUserAsync(string email, string password)
