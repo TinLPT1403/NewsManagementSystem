@@ -143,8 +143,8 @@ namespace DAL.Extensions
             );
             modelBuilder.Entity<SystemAccount>().HasData(
             new SystemAccount
-                {
-                    AccountId = 1,  
+                {  
+                    AccountId = -1,
                     AccountName = "Kha UwU",
                     AccountEmail = "admin@example.com",
                     AccountRole = 1, // Assuming 1 represents an admin role
@@ -155,7 +155,7 @@ namespace DAL.Extensions
             modelBuilder.Entity<SystemAccount>().HasData(
                 new SystemAccount
                 {
-                    AccountId = 2,
+                    AccountId = -2,
                     AccountName = "John",
                     AccountEmail = "lecturer@example.com",
                     AccountRole = 2, 
@@ -165,7 +165,7 @@ namespace DAL.Extensions
             modelBuilder.Entity<SystemAccount>().HasData(
                 new SystemAccount
                 {
-                    AccountId = 3,
+                    AccountId = -3,
                     AccountName = "Larry",
                     AccountEmail = "staff@example.com",
                     AccountRole = 3, 

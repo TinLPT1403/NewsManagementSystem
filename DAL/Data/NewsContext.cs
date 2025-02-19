@@ -49,7 +49,19 @@ namespace DAL.Data
                 .HasForeignKey(c => c.ParentCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-         
+            // Configure relationships for CreatedBy and UpdatedBy in NewsArticle
+            modelBuilder.Entity<NewsArticle>()
+                .HasOne(n => n.CreatedBy)
+                .WithMany(a => a.CreatedArticles)
+                .HasForeignKey(n => n.CreatedById)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<NewsArticle>()
+                .HasOne(n => n.UpdatedBy)
+                .WithMany(a => a.UpdatedArticles)
+                .HasForeignKey(n => n.UpdatedById)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
     }
