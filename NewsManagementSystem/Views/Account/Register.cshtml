@@ -1,8 +1,8 @@
 ﻿@model DAL.Entities.SystemAccount
 
 @{
-    ViewData["Title"] = "Create New Account";
-    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
 }
 
 <style>
@@ -132,21 +132,12 @@
 
 </style>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success">@TempData["Message"]</div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-
 <div class="create-account-container">
-    <h1>Create New System Account</h1>
+    <h1>Register Account</h1>
     <h4>Fill in the details for the new account</h4>
     <hr />
 
-    <form asp-action="CreateAccount">
+    <form asp-action="Register">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="form-group">
@@ -177,12 +168,12 @@
         </div>
 
         <div class="form-group">
-            <input type="submit" value="Create Account" class="btn btn-primary" />
+            <input type="submit" value="Register" class="btn btn-primary" />
         </div>
     </form>
 
     <p class="back-to-list">
-        <a asp-action="ManageAccounts">Back to Account List</a>
+        <a asp-action="Login">Back to Login</a>
     </p>
 </div>
 

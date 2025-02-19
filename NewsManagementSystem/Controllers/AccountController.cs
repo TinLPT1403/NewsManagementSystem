@@ -83,14 +83,30 @@ namespace NewsManagementSystem.Controllers
                 _ => RedirectToAction("Index", "NewsArticles") // Default fallback
             };
         }
+        // GET: /Admin/CreateAccount
+        public IActionResult Register()
+        {
+            return View();
+        }
 
+        // POST: /Admin/CreateAccount
+        [HttpPost]
+        public async Task<IActionResult> Register(SystemAccount account)
+        {
+            if (ModelState.IsValid)
+            {
+                await _accountService.CreateAccountAsync(account);
+                return RedirectToAction(nameof(Login));
+            }
+            return View(account);
+        }
 
 
         // GET: /Account/Logout
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "News");
+           // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Account");
         }
 
         private async Task<string> ValidateUserAsync(string email, string password)

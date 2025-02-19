@@ -36,6 +36,8 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> Index()
         {
             var id = _userUtils.GetUserFromToken();
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName");
+            ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName");
             return View(await _newsArticleService.GetNewsArticlesByUserIdAsync(id));
 
         }
@@ -82,9 +84,11 @@ namespace NewsManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 await _newsArticleService.CreateNewsArticleAsync(newsArticle);
+                TempData["Message"] = "Article created successfully.";
                 return RedirectToAction(nameof(Index), "NewsArticles");
             }
 
+            TempData["Error"] = "Failed to create article.";
             return View(newsArticle);
         }
 
@@ -107,9 +111,14 @@ namespace NewsManagementSystem.Controllers
                 NewsSource = newsArticle.NewsSource,
                 NewsStatus = newsArticle.NewsStatus,
                 CategoryId = newsArticle.CategoryId,
-                NewsTagIds = newsArticle.NewsTags.Select(t => t.TagId).ToList()
+                NewsTagIds = _newsTagService.GetTagsOfArticleAsync(id).Result.Select(t => t.TagId).ToList()
             };
-            // Fetch all tags from the service
+
+            var newsTag = model.NewsTagIds;
+
+            ViewBag.NewsTag = newsTag;
+
+
             var tags = await _tagService.GetAllTagsAsync();
 
             // Pass the tags to the view using ViewBag
@@ -125,9 +134,10 @@ namespace NewsManagementSystem.Controllers
             if (ModelState.IsValid)
             {
                 await _newsArticleService.UpdateNewsArticleAsync(id, newsArticle);
+                TempData["Message"] = "Article updated successfully.";
                 return RedirectToAction(nameof(Index));
             }
-
+            TempData["Error"] = "Failed to update article.";
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName", newsArticle.CategoryId);
             return View(newsArticle);
         }
@@ -151,8 +161,38 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             await _newsArticleService.DeactiveNewsArticleAsync(id);
+            TempData["Message"] = "Article deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
+
+        // GET: NewsArticles/Search
+        public async Task<IActionResult> Search(string searchTerm, int? categoryId, int? tagId)
+        {
+            var articles = await _newsArticleService.GetActiveNewsArticlesAsync();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                articles = articles.Where(a => a.NewsTitle.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                                               a.Headline.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (categoryId.HasValue)
+            {
+                articles = articles.Where(a => a.CategoryId == categoryId.Value).ToList();
+            }
+
+            if (tagId.HasValue)
+            {
+                var taggedArticles = await _newsTagService.GetArticlesFromTagAsync(tagId.Value);
+                articles = articles.Intersect(taggedArticles).ToList();
+            }
+
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName", categoryId);
+            ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName", tagId);
+
+            return View("Index", articles);
+        }
+
         private int GetUserFromToken()
         {
             var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);

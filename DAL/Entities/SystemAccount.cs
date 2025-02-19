@@ -14,14 +14,24 @@ namespace DAL.Entities
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Mark as auto-increment (identity)
         public int AccountId { get; set; }
-        public required string AccountName { get; set; }
-        public required string AccountEmail { get; set; }
-        public required int AccountRole { get; set; }
-        public required string AccountPassword { get; set; }
 
+        [Required]
+        [StringLength(100, MinimumLength = 3)]
+        public string AccountName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public string AccountEmail { get; set; }
+
+        [Required]
+        [Range(1, 2)]
+        public int AccountRole { get; set; }
+
+        [Required]
+        [StringLength(100, MinimumLength = 6)]
+        public string AccountPassword { get; set; }
 
         public virtual ICollection<NewsArticle> CreatedArticles { get; set; } = new List<NewsArticle>(); // Reverse navigation
         public virtual ICollection<NewsArticle> UpdatedArticles { get; set; } = new List<NewsArticle>(); // Reverse navigation
-
     }
 }

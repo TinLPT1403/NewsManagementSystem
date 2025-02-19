@@ -132,7 +132,6 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="Staff" asp-action="MyProfile">
                                 <i class="fas fa-shield-alt"></i> Profile
@@ -146,6 +145,14 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="Categories" asp-action="Index">
                                 <i class="fas fa-tags"></i> Categories
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                    
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="Account" asp-action="Logout">
+                                <i class="fas fa-sign-out-alt"></i> Logout
                             </a>
                         </li>
                     </ul>
@@ -168,6 +175,8 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
