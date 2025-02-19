@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DAL.Entities;
 using DAL.Extensions;
 
@@ -21,42 +16,52 @@ namespace DAL.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Seed data if necessary
             modelBuilder.Seed();
-            // Configure Many-to-Many Relationship between NewsArticle and Tag
+
+            // Configure the relationship between NewsArticle and Category
+            modelBuilder.Entity<NewsArticle>()
+                .HasOne(n => n.Category)
+                .WithMany()
+                .HasForeignKey(n => n.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configure the Many-to-Many relationship between NewsArticle and Tag through NewsTag
             modelBuilder.Entity<NewsTag>()
-                .HasKey(nt => new { nt.NewsArticleId, nt.TagId }); // Composite Primary Key
+                .HasKey(nt => new { nt.NewsArticleId, nt.TagId });
+
+            modelBuilder.Entity<NewsTag>()
+                .HasOne(nt => nt.NewsArticle)
+                .WithMany(na => na.NewsTags)
+                .HasForeignKey(nt => nt.NewsArticleId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<NewsTag>()
                 .HasOne(nt => nt.Tag)
                 .WithMany(t => t.NewsTags)
                 .HasForeignKey(nt => nt.TagId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<NewsTag>()
-                .HasOne(nt => nt.NewsArticle)
-                .WithMany(n => n.NewsTags)
-                .HasForeignKey(nt => nt.NewsArticleId)
-                .OnDelete(DeleteBehavior.Cascade); // Deleting an article removes its tags, but not vice versa
-
-            // Self-referencing Category Relationship
+            // Self-referencing Category Relationship (ParentCategory)
             modelBuilder.Entity<Category>()
                 .HasOne(c => c.ParentCategory)
                 .WithMany()
                 .HasForeignKey(c => c.ParentCategoryId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevents accidental parent category deletion
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Relationship for CreatedBy & UpdatedBy in NewsArticle
+            // Configure SystemAccount relationships - Fix for multiple cascade paths
             modelBuilder.Entity<NewsArticle>()
                 .HasOne(n => n.CreatedBy)
                 .WithMany(a => a.CreatedArticles)
                 .HasForeignKey(n => n.CreatedById)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<NewsArticle>()
                 .HasOne(n => n.UpdatedBy)
                 .WithMany(a => a.UpdatedArticles)
                 .HasForeignKey(n => n.UpdatedById)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         }
+
     }
 }
