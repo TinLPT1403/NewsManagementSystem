@@ -10,8 +10,8 @@ namespace DAL.Interfaces
     public interface INewsArticleRepository : IGenericRepository<NewsArticle>
     {
         Task<IEnumerable<NewsArticle>> GetAllByCategoryIdAsync(int id);
-        Task<IEnumerable<NewsArticle>> GetNewsArticlesAsync();
+        Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync();
 
-        Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId);
+        Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesByUserIdAsync(int userId);
     }
 }

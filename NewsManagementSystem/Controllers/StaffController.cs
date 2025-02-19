@@ -32,7 +32,7 @@ namespace NewsManagementSystem.Controllers
         // GET: /Staff/ManageCategories
         public async Task<IActionResult> ManageCategories()
         {
-            var categories = await _categoryService.GetAllCategoriesAsync();
+            var categories = await _categoryService.GetActiveCategoriesAsync();
             return View(categories);
         }
 
@@ -81,7 +81,7 @@ namespace NewsManagementSystem.Controllers
         {
             try
             {
-                await _categoryService.DeleteCategoryAsync(id);
+                await _categoryService.DeactiveCategoryAsync(id);
             }
             catch (InvalidOperationException ex)
             {
@@ -93,7 +93,7 @@ namespace NewsManagementSystem.Controllers
         // GET: /Staff/ManageNewsArticles
         public async Task<IActionResult> ManageNewsArticles()
         {
-            var articles = await _newsArticleService.GetAllNewsArticlesAsync();
+            var articles = await _newsArticleService.GetActiveNewsArticlesAsync();
             return View(articles);
         }
 
@@ -118,7 +118,7 @@ namespace NewsManagementSystem.Controllers
         // GET: /Staff/EditNewsArticle/{id}
         public async Task<IActionResult> EditNewsArticle(string id)
         {
-            var article = await _newsArticleService.GetNewsArticleAsync(id);
+            var article = await _newsArticleService.GetNewsArticleByIdAsync(id);
             if (article == null) return NotFound();
             return View(article);
         }
@@ -139,7 +139,7 @@ namespace NewsManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteNewsArticle(string id)
         {
-            await _newsArticleService.DeleteNewsArticleAsync(id);
+            await _newsArticleService.DeactiveNewsArticleAsync(id);
             return RedirectToAction(nameof(ManageNewsArticles));
         }
 

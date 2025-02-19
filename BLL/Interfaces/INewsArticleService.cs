@@ -12,9 +12,9 @@ namespace BLL.Interfaces
     {
         Task CreateNewsArticleAsync(NewsArticleCreateDTO dto);
         Task UpdateNewsArticleAsync(string id, NewsArticleUpdateDTO dto);
-        Task DeleteNewsArticleAsync(string id);
-        Task<NewsArticle> GetNewsArticleAsync(string id);
-        Task<IEnumerable<NewsArticle>> GetAllNewsArticlesAsync();
+        Task DeactiveNewsArticleAsync(string id);
+        Task<NewsArticle> GetNewsArticleByIdAsync(string id);
+        Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync();
         Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId);
     }
 }

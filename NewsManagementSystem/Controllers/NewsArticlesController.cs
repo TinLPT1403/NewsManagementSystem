@@ -46,7 +46,7 @@ namespace NewsManagementSystem.Controllers
                 return NotFound();
             }
 
-            var newsArticle = await _newsArticleService.GetNewsArticleAsync(id);
+            var newsArticle = await _newsArticleService.GetNewsArticleByIdAsync(id);
 
             if (newsArticle == null)
             {
@@ -59,7 +59,7 @@ namespace NewsManagementSystem.Controllers
         // GET: NewsArticles/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAllCategoriesAsync(), "CategoryId", "CategoryName");
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName");
             // Fetch all tags from the service
             var tags = await _tagService.GetAllTagsAsync();
 
@@ -73,7 +73,7 @@ namespace NewsManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewsArticleCreateDTO newsArticle)
         {
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAllCategoriesAsync(), "CategoryId", "CategoryName", newsArticle.CategoryId);
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName", newsArticle.CategoryId);
             //GetAllTags
 
             if (ModelState.IsValid)
@@ -89,13 +89,13 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> Edit(string id)
         {
 
-            var newsArticle = await _newsArticleService.GetNewsArticleAsync(id);
+            var newsArticle = await _newsArticleService.GetNewsArticleByIdAsync(id);
 
             if (newsArticle == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAllCategoriesAsync(), "CategoryId", "CategoryName", newsArticle.CategoryId);
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName", newsArticle.CategoryId);
             var model = new NewsArticleUpdateDTO
             {
                 NewsTitle = newsArticle.NewsTitle,
@@ -125,14 +125,14 @@ namespace NewsManagementSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["CategoryId"] = new SelectList(await _categoryService.GetAllCategoriesAsync(), "CategoryId", "CategoryName", newsArticle.CategoryId);
+            ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName", newsArticle.CategoryId);
             return View(newsArticle);
         }
 
         // GET: NewsArticles/Delete/5
         public async Task<IActionResult> Delete(string id)
         {
-            var newsArticle = await _newsArticleService.GetNewsArticleAsync(id);
+            var newsArticle = await _newsArticleService.GetNewsArticleByIdAsync(id);
 
             if (newsArticle == null)
             {
@@ -147,7 +147,7 @@ namespace NewsManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            await _newsArticleService.DeleteNewsArticleAsync(id);
+            await _newsArticleService.DeactiveNewsArticleAsync(id);
             return RedirectToAction(nameof(Index));
         }
         private int GetUserFromToken()
