@@ -16,9 +16,9 @@ namespace BLL.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<Category>> GetActiveCategoriesAsync()
         {
-            return await _unitOfWork.Categories.GetAllAsync();
+            return await _unitOfWork.Categories.GetActiveCategories();
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id)
@@ -45,15 +45,15 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteCategoryAsync(int id)
+        public async Task DeactiveCategoryAsync(int id)
         {
             var category = await _unitOfWork.Categories.GetByIdAsync(id);
             if (category == null) throw new KeyNotFoundException("Category not found.");
 
             // Check if the category is associated with any news articles
             if ((await _unitOfWork.NewsArticles.GetAllByCategoryIdAsync(id)).Any()) throw new InvalidOperationException("Cannot delete category associated with news articles.");
-
-            await _unitOfWork.Categories.DeleteAsync(category);
+            category.IsActive = false;
+            await _unitOfWork.Categories.UpdateAsync(category);
             await _unitOfWork.SaveChangesAsync();
         }
     }
