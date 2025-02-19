@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NewsManagementSystem
 {
@@ -23,13 +24,10 @@ namespace NewsManagementSystem
             builder.Services.AddSingleton(mapper);
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddRazorPages();
+            //builder.Services.AddRazorPages();
 
             builder.Services.AddDbContext<NewsContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddRazorPages();
-            builder.Services.AddControllersWithViews();
             //JWT token
 
             var key = Encoding.ASCII.GetBytes("ilovecat");
@@ -65,6 +63,15 @@ namespace NewsManagementSystem
             builder.Services.AddScoped<BLL.Interfaces.ITagService, BLL.Services.TagService>();
             builder.Services.AddScoped<DAL.Interfaces.INewsArticleRepository, DAL.Repositories.NewsArticleRepository>();
             builder.Services.AddHttpContextAccessor();
+            // Register cookie authentication
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    // Specify the paths for login, logout, and access denied as needed.
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                    options.AccessDeniedPath = "/Account/AccessDenied";
+                });
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Lecturer", policy => policy.RequireRole("1"));
@@ -99,9 +106,9 @@ namespace NewsManagementSystem
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
-            app.MapRazorPages();
+            //app.MapRazorPages()
 
             app.Run();
         }
