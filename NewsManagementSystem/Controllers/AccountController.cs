@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using DAL.Entities;
 using System.Collections.Generic;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,20 +26,7 @@ namespace NewsManagementSystem.Controllers
             _userUtils = userUtils;
         }
         // GET: /Account/Login
-        public IActionResult Login()
-        {
-            // Force clear the authentication token
-            Response.Cookies.Delete("JwtToken");
-
-            // Clear any authentication context
-            HttpContext.SignOutAsync();
-            // Add cache control headers to prevent browser caching
-            Response.Headers.Add("Cache-Control", "no-cache, no-store, must-revalidate");
-            Response.Headers.Add("Pragma", "no-cache");
-            Response.Headers.Add("Expires", "0");
-
-            return View();
-        }
+        public IActionResult Login() => View();
 
 
         // POST: /Account/Login
