@@ -23,13 +23,10 @@ namespace NewsManagementSystem
             builder.Services.AddSingleton(mapper);
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddRazorPages();
+            //builder.Services.AddRazorPages();
 
             builder.Services.AddDbContext<NewsContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            builder.Services.AddRazorPages();
-            builder.Services.AddControllersWithViews();
             //JWT token
 
             var key = Encoding.ASCII.GetBytes("ilovecat");
@@ -99,9 +96,9 @@ namespace NewsManagementSystem
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
-            app.MapRazorPages();
+            //app.MapRazorPages()
 
             app.Run();
         }
