@@ -141,24 +141,40 @@ namespace BLL.Services
                 article.CategoryId = dto.CategoryId.Value;
             }
 
-            // Update tags if provided in the DTO (removing old ones and adding new ones)
-            if (dto.NewsTagIds != null && dto.NewsTagIds.Any())
+            // Update tags if provided in the DTO (preserving unmodified tags)
+            if (dto.NewsTagIds != null)
             {
-                // Remove old tags associated with the article
+                // Get existing tags for this article
                 var existingTags = await _unitOfWork.NewsTags
                     .GetAllByListAsync(nt => nt.NewsArticleId == id);
+                var existingTagIds = existingTags.Select(et => et.TagId).ToList();
 
-                _unitOfWork.NewsTags.RemoveRange(existingTags);
+                // Find tags to add (tags in the new list but not in existing tags)
+                var tagsToAdd = dto.NewsTagIds
+                    .Where(tagId => !existingTagIds.Contains(tagId))
+                    .ToList();
 
-                // Add new tags from the DTO
-                foreach (var tagId in dto.NewsTagIds)
+                // Find tags to remove (tags in existing tags but not in the new list)
+                var tagsToRemove = existingTags
+                    .Where(et => !dto.NewsTagIds.Contains(et.TagId))
+                    .ToList();
+
+                // Remove tags that are no longer needed
+                if (tagsToRemove.Any())
                 {
+                    _unitOfWork.NewsTags.RemoveRange(tagsToRemove);
+                }
+
+                // Add new tags
+                foreach (var tagId in tagsToAdd)
+                {
+                    // Verify the tag exists before adding it
                     var tag = await _unitOfWork.Tags.GetByIdAsync(tagId);
                     if (tag != null)
                     {
                         var newsTag = new NewsTag
                         {
-                            NewsArticleId = article.NewsArticleId,  // Assuming this is the existing article's ID
+                            NewsArticleId = article.NewsArticleId,
                             TagId = tagId,
                         };
                         await _unitOfWork.NewsTags.AddAsync(newsTag);
