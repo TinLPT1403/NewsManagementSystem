@@ -6,117 +6,137 @@
 }
 
 <style>
-    /* Reusing some styles from News Article page, and adding specific account styles */
+    /* Styling for Manage System Accounts - Card Layout with Colorless Action Links */
 
-    /* Theme Variables - Consistent with News page theme */
+    /* Theme Variables - Consistent with other admin pages */
     :root {
-        --primary-color: #007bff;
+        --primary-color: #0056b3; /* Updated primary color */
         --secondary-color: #6c757d;
         --background-color: #f8f9fa;
         --text-color: #343a40;
         --accent-color: #ffc107;
-        --article-background: #ffffff; /* Reusing article background for account containers */
-        --article-border: #dee2e6; /* Reusing article border */
-        --meta-color: #6c757d; /* Reusing meta color */
+        --account-card-background: #ffffff; /* Background for account cards */
+        --account-card-border: #dee2e6;
+        --account-card-border-radius: 8px;
+        --account-card-padding: 20px;
+        --account-card-margin-bottom: 20px;
+        --account-action-color: var(--primary-color);
+        --account-action-hover-color: darken(var(--account-action-color), 10%);
+        --account-meta-color: var(--secondary-color);
     }
 
     body {
         background-color: var(--background-color);
         color: var(--text-color);
-        font-family: sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
-    h1, h2, h3, h4, h5, h6 {
-        color: var(--text-color);
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 25px;
+        text-align: center;
     }
-
-    .btn-primary {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-    }
-
-        .btn-primary:hover {
-            background-color: darken(var(--primary-color), 10%);
-            border-color: darken(var(--primary-color), 10%);
-        }
-
-    .btn-warning {
-        background-color: var(--accent-color);
-        border-color: var(--accent-color);
-        color: var(--text-color);
-    }
-
-        .btn-warning:hover {
-            background-color: darken(var(--accent-color), 10%);
-            border-color: darken(var(--accent-color), 10%);
-        }
-
-    .btn-info {
-        background-color: var(--secondary-color);
-        border-color: var(--secondary-color);
-    }
-
-        .btn-info:hover {
-            background-color: darken(var(--secondary-color), 10%);
-            border-color: darken(var(--secondary-color), 10%);
-        }
-
-    .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-    }
-
-        .btn-danger:hover {
-            background-color: darken(#dc3545, 10%);
-            border-color: darken(#dc3545, 10%);
-        }
 
     .accounts-container {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Responsive grid for accounts */
+        gap: 25px;
+        margin-top: 20px;
     }
 
-    .account-item { /* Renamed from news-article to account-item */
-        border: 1px solid var(--article-border);
-        margin-bottom: 20px;
-        padding: 15px;
-        border-radius: 5px;
-        background-color: var(--article-background);
+    .account-card { /* Renamed from account-item to account-card for clarity */
+        background-color: var(--account-card-background);
+        border: 1px solid var(--account-card-border);
+        border-radius: var(--account-card-border-radius);
+        padding: var(--account-card-padding);
+        margin-bottom: var(--account-card-margin-bottom);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.07); /* Subtle shadow */
+        transition: transform 0.2s ease-in-out; /* Hover effect */
     }
 
-        .account-item h2 { /* Style for Account Name */
-            margin-top: 0;
-            margin-bottom: 5px; /* Reduced margin */
-            color: var(--text-color);
-            font-size: 1.7em; /* Slightly larger for names */
+        .account-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); /* Stronger shadow on hover */
         }
 
-        .account-item h4 { /* Style for Account Role (using h4 for visual hierarchy) */
-            margin-top: 0;
-            margin-bottom: 10px; /* Reduced margin */
-            color: var(--secondary-color);
-            font-size: 1.1em; /* Slightly smaller than Headline from News page */
-        }
-
-    .account-meta { /* For Email and Password - using a meta style class */
-        font-size: 0.9em;
-        color: var(--meta-color);
-        margin-bottom: 8px; /* Reduced margin */
+    .account-name { /* Style for Account Name */
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+        font-size: 1.8em;
+        font-weight: bold;
+        word-wrap: break-word; /* Handle long names */
     }
 
-    .account-actions { /* Actions for each account - consistent naming */
+    .account-role { /* Style for Account Role */
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: var(--secondary-color);
+        font-size: 1.2em;
+        font-style: italic;
+    }
+
+    .account-meta { /* Style for Email and Password */
+        font-size: 0.95em;
+        color: var(--account-meta-color);
+        margin-bottom: 10px;
+    }
+
+    .password-display {
+        display: inline-block;
+        margin-left: 5px;
+    }
+
+    .show-password-button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.9rem;
+        border-radius: 0.2rem;
+        margin-left: 8px;
+    }
+
+
+    .account-actions { /* Actions for each account */
         text-align: right;
-        margin-top: 15px; /* Add some space above actions */
+        margin-top: 25px;
     }
 
         .account-actions a {
-            margin-left: 5px;
+            color: var(--account-action-color);
+            text-decoration: none;
+            margin-left: 8px;
+            padding: 10px 15px;
+            border: none; /* Removed border for colorless buttons */
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            display: inline-block; /* Ensure actions are inline */
         }
 
-    .create-new-button {
-        margin-bottom: 20px;
+            .account-actions a:hover {
+                background-color: transparent; /* Make hover background transparent for colorless buttons */
+                color: var(--account-action-color); /* Keep text color on hover */
+            }
+
+
+    .create-new-account-button {
+        display: block;
+        text-align: center;
+        margin-bottom: 30px;
     }
+
+        .create-new-account-button a {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            transition: background-color 0.2s ease;
+        }
+
+            .create-new-account-button a:hover {
+                background-color: darken(var(--primary-color), 10%);
+            }
 
 </style>
 
@@ -140,34 +160,47 @@
 
 <h1>Manage System Accounts</h1>
 
-<p class="create-new-button">
+<p class="create-new-account-button">
     <a asp-action="CreateAccount" class="btn btn-primary">Create New Account</a>
 </p>
 
 <div class="accounts-container">
     @foreach (var item in Model)
     {
-        <div class="account-item">
-            <h2>
+        <div class="account-card">
+            <h2 class="account-name">
                 @Html.DisplayFor(modelItem => item.AccountName)
             </h2>
-            <h4>
-                Role: @Html.DisplayFor(modelItem => item.AccountRole)
+            <h4 class="account-role">
+                Role:
+                @if (item.AccountRole == 1)
+                {
+                    <span>Staff</span>
+                }
+                else if (item.AccountRole == 2)
+                {
+                    <span>Lecturer</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.AccountRole)
+                    // Fallback for other roles if any
+                }
             </h4>
             <div class="account-meta">
                 Email: @Html.DisplayFor(modelItem => item.AccountEmail)
             </div>
             <div class="account-meta">
                 Password:
-                <span id="password-@item.AccountId" data-hidden-password="@item.AccountPassword">********</span>
-                <button id="show-password-btn-@item.AccountId" type="button" class="btn btn-sm btn-outline-secondary" onclick="togglePasswordVisibility('@item.AccountId')">Show Password</button>
-                <small>(Click "Show Password" to view)</small>
+                <span class="password-display" id="password-@item.AccountId" data-hidden-password="@item.AccountPassword">********</span>
+                <button id="show-password-btn-@item.AccountId" type="button" class="btn btn-sm btn-outline-secondary show-password-button" onclick="togglePasswordVisibility('@item.AccountId')">Show Password</button>
+                <small>(Click to view)</small>
             </div>
 
             <div class="account-actions">
-                <a asp-action="EditAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-warning">Edit</a>
-                <a asp-action="DetailsAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-info">Details</a>
-                <a asp-action="DeleteAccount" asp-route-id="@item.AccountId" class="btn btn-sm btn-danger">Delete</a>
+                <a asp-action="EditAccount" asp-route-id="@item.AccountId">Edit</a>
+                <a asp-action="DetailsAccount" asp-route-id="@item.AccountId">Details</a>
+                <a asp-action="DeleteAccount" asp-route-id="@item.AccountId">Delete</a>
             </div>
         </div>
     }

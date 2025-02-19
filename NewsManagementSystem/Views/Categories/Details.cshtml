@@ -1,0 +1,165 @@
+﻿@model DAL.Entities.Category
+
+@{
+    ViewData["Title"] = "Category Details"; // More descriptive title
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Reusing styles from other Details pages and Category Index for consistency */
+
+    :root {
+        --primary-color: #0056b3;
+        --secondary-color: #6c757d;
+        --background-color: #f8f9fa;
+        --text-color: #343a40;
+        --accent-color: #ffc107;
+        --details-card-background: #ffffff; /* Using "details-card" for consistency */
+        --details-card-border: #dee2e6;
+        --details-card-border-radius: 8px;
+        --details-page-max-width: 700px; /* Adjust max width as needed */
+        --details-page-padding: 30px;
+        --detail-label-color: var(--secondary-color);
+        --action-button-color: var(--primary-color);
+        --action-button-hover-color: darken(var(--action-button-color), 10%);
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .details-container { /* Reusing "details-container" for consistency */
+        max-width: var(--details-page-max-width);
+        margin: 30px auto;
+        padding: var(--details-page-padding);
+        background-color: var(--details-card-background);
+        border: 1px solid var(--details-card-border);
+        border-radius: var(--details-card-border-radius);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    h4 {
+        color: var(--text-color);
+        margin-bottom: 20px;
+    }
+
+    .detail-row {
+        display: flex;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--details-card-border); /* Separator between details */
+    }
+
+        /* Remove border from the last detail row */
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0; /* Adjust last row margin if needed */
+            padding-bottom: 0;
+        }
+
+    .detail-label {
+        flex-basis: 30%; /* Adjust label width as needed */
+        font-weight: bold;
+        color: var(--detail-label-color);
+        padding-right: 15px;
+        text-align: right; /* Right-align labels */
+        line-height: 1.6; /* Adjust label line height to match value */
+    }
+
+    .detail-value {
+        flex-basis: 70%; /* Adjust value width as needed */
+        color: var(--text-color);
+        line-height: 1.6; /* Ensure consistent line height */
+    }
+
+    .action-buttons {
+        margin-top: 30px;
+        text-align: center; /* Center action buttons */
+    }
+
+        .action-buttons a {
+            color: var(--action-button-color);
+            text-decoration: none;
+            margin: 0 10px; /* Space between buttons */
+            padding: 10px 20px;
+            border: 1px solid var(--action-button-color);
+            border-radius: 5px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            display: inline-block; /* Ensure buttons are inline */
+        }
+
+            .action-buttons a:hover {
+                background-color: var(--action-button-color);
+                color: white;
+            }
+
+    .is-active-display {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 7px;
+        font-weight: bold;
+        font-size: 1.1em;
+    }
+
+    .is-active-true {
+        background-color: #28a745; /* Green for active */
+        color: white;
+    }
+
+    .is-active-false {
+        background-color: #dc3545; /* Red for inactive */
+        color: white;
+    }
+
+</style>
+
+<div class="details-container">
+    <h1>Category Details</h1>
+
+    <h4>Detailed Information</h4>
+    <hr />
+
+    <div class="detail-row">
+        <div class="detail-label">@Html.DisplayNameFor(model => model.CategoryName)</div>
+        <div class="detail-value">@Html.DisplayFor(model => model.CategoryName)</div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">@Html.DisplayNameFor(model => model.CategoryDescription)</div>
+        <div class="detail-value">@Html.DisplayFor(model => model.CategoryDescription)</div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">@Html.DisplayNameFor(model => model.IsActive)</div>
+        <div class="detail-value">
+            @if (Model.IsActive == true)
+            {
+                <span class="is-active-display is-active-true">Active</span>
+            }
+            else
+            {
+                <span class="is-active-display is-active-false">Inactive</span>
+            }
+        </div>
+    </div>
+
+    <div class="detail-row">
+        <div class="detail-label">@Html.DisplayNameFor(model => model.ParentCategory)</div>
+        <div class="detail-value">
+            @Html.DisplayFor(model => model.ParentCategory.CategoryDescription)
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <a asp-action="Edit" asp-route-id="@Model?.CategoryId">Edit Category</a>
+        <a asp-action="Index">Back to Category List</a>
+    </div>
+</div>
