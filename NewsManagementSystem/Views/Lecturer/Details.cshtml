@@ -93,7 +93,7 @@
     </h2>
 
     <p class="meta-info">
-        Published on: @Model.CreatedDate.ToString() | Category: @Model.Category?.CategoryDescription | Source: @Html.DisplayFor(model => model.NewsSource)
+        Published on: @Model.CreatedDate.ToString() | Category: @Model.Category?.CategoryDescription | Source: @Html.DisplayFor(model => model.NewsSource) | Author: @Html.DisplayFor(model => model.CreatedBy);
     </p>
 
     <div class="news-content">
