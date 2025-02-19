@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NewsManagementSystem
 {
@@ -62,6 +63,15 @@ namespace NewsManagementSystem
             builder.Services.AddScoped<BLL.Interfaces.ITagService, BLL.Services.TagService>();
             builder.Services.AddScoped<DAL.Interfaces.INewsArticleRepository, DAL.Repositories.NewsArticleRepository>();
             builder.Services.AddHttpContextAccessor();
+            // Register cookie authentication
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    // Specify the paths for login, logout, and access denied as needed.
+                    options.LoginPath = "/Account/Login";
+                    options.LogoutPath = "/Account/Logout";
+                    options.AccessDeniedPath = "/Account/AccessDenied";
+                });
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("Lecturer", policy => policy.RequireRole("1"));

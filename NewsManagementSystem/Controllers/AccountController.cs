@@ -26,7 +26,6 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> Login(string email, string password)
         {
             // Validate email and password (use your own user service)
-            // For example purposes, assume a valid user is returned with a Role value.
             string userRole = await ValidateUserAsync(email, password);
             if (userRole == null)
             {
@@ -41,11 +40,11 @@ namespace NewsManagementSystem.Controllers
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync
-                (CookieAuthenticationDefaults.AuthenticationScheme,
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity));
 
-            return RedirectToAction("Index", "News");
+            return RedirectToAction("Index", "NewsArticles");
         }
 
         // GET: /Account/Logout
