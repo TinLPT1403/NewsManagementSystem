@@ -1,0 +1,81 @@
+﻿@model IEnumerable<DAL.Entities.NewsArticle>
+
+@{
+    ViewData["Title"] = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>News Articles Report</h1>
+
+<p>
+    Generate a report of news articles created within a specific date range.
+</p>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Report" method="get">
+            <div class="form-group">
+                <label for="startDate" class="control-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" value="@ViewBag.StartDate?.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="form-group">
+                <label for="endDate" class="control-label">End Date</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" value="@ViewBag.EndDate?.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Generate Report" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.NewsTitle)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Headline)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreatedDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category.CategoryDescription)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NewsTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Headline)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreatedDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.CategoryDescription)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-controller="NewsArticles" asp-route-id="@item.NewsArticleId">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model != null)
+{
+    <p>No news articles found within the selected date range.</p>
+}
