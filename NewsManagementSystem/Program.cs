@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using DAL.Interfaces;
 using DAL.Repositories;
+using BLL.Utils;
 
 namespace NewsManagementSystem
 {
@@ -54,7 +55,7 @@ namespace NewsManagementSystem
             .AddJwtBearer(options =>
             {
                 var secretKey = builder.Configuration["Jwt:Secret"]; // Get JWT Secret Key
-
+                options.TokenValidationParameters.RoleClaimType = "role";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -82,6 +83,7 @@ namespace NewsManagementSystem
             builder.Services.AddScoped<INewsTagService, NewsTagService>();
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
+            builder.Services.AddScoped<UserUtils>();
             builder.Services.AddHttpContextAccessor();
 
             // Add session services

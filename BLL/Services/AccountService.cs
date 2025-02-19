@@ -41,7 +41,7 @@ namespace BLL.Services
             if (string.IsNullOrEmpty(role)) return null;
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, email));
-            claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim("role", role));  // Use lowercase "role"
             claims.Add(new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()));
 
             var token = TokenService.GenerateToken(claims);

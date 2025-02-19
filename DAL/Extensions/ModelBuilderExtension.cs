@@ -151,6 +151,27 @@ namespace DAL.Extensions
                     AccountPassword = "123456" // Ideally, use a hashed password
                 }
             );
+
+            modelBuilder.Entity<SystemAccount>().HasData(
+                new SystemAccount
+                {
+                    AccountId = 2,
+                    AccountName = "John",
+                    AccountEmail = "lecturer@example.com",
+                    AccountRole = 2, 
+                    AccountPassword = "123456" 
+                }
+            );
+            modelBuilder.Entity<SystemAccount>().HasData(
+                new SystemAccount
+                {
+                    AccountId = 3,
+                    AccountName = "Larry",
+                    AccountEmail = "staff@example.com",
+                    AccountRole = 3, 
+                    AccountPassword = "123456" 
+                }
+            );
         }
 
     }

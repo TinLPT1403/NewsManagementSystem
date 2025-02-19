@@ -1,5 +1,6 @@
 ﻿using BLL.DTOs;
 using BLL.Interfaces;
+using BLL.Utils;
 using DAL.Entities;
 using DAL.Interfaces;
 using DAL.UnitOfWork;
@@ -17,18 +18,18 @@ namespace BLL.Services
     public class NewsArticleService : INewsArticleService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly UserUtils _userUtils;
         private readonly INewsArticleRepository _newsArticleRepository;
 
-        public NewsArticleService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor, INewsArticleRepository newsArticleRepository)
+        public NewsArticleService(IUnitOfWork unitOfWork, UserUtils userUtils, INewsArticleRepository newsArticleRepository)
         {
             _unitOfWork = unitOfWork;
-            _httpContextAccessor = httpContextAccessor;
+            _userUtils = userUtils;
             _newsArticleRepository = newsArticleRepository;
         }
         public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto)
         {
-            var userId = GetUserFromToken();
+            var userId = _userUtils.GetUserFromToken();
             Console.WriteLine("UserId: " + userId);
             var user = await _unitOfWork.SystemAccounts.GetByIdAsync(userId); // Fetch user by ID
             if (user == null)
@@ -193,25 +194,6 @@ namespace BLL.Services
 
             // Save the changes to the database
             await _unitOfWork.SaveChangesAsync();
-        }
-
-        private int? GetUserFromToken()
-        {
-            // Retrieve token from the cookie
-            var token = _httpContextAccessor.HttpContext?.Request.Cookies["JwtToken"];
-            if (string.IsNullOrEmpty(token))
-            {
-                return null;
-            }
-
-            var handler = new JwtSecurityTokenHandler();
-            var jwtToken = handler.ReadJwtToken(token);
-            var userIdClaim = jwtToken?.Claims.FirstOrDefault(c => c.Type == "NameIdentifier" || c.Type == "nameid");
-            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
-            {
-                return userId;
-            }
-            return null;
         }
 
     }

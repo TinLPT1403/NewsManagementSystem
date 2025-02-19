@@ -16,9 +16,9 @@ namespace BLL.DTOs
         [Required]
         public string Headline { get; set; }
 
-        public string? NewsContent { get; set; }
+        public string NewsContent { get; set; }
 
-        public string? NewsSource { get; set; }
+        public string NewsSource { get; set; }
 
         public bool NewsStatus { get; set; } = true;
 

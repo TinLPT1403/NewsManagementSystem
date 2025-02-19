@@ -11,6 +11,7 @@ using BLL.Interfaces;
 using BLL.DTOs;
 using Humanizer;
 using System.Security.Claims;
+using BLL.Utils;
 
 namespace NewsManagementSystem.Controllers
 {
@@ -20,19 +21,21 @@ namespace NewsManagementSystem.Controllers
         private readonly ICategoryService _categoryService;
         private readonly INewsTagService _newsTagService;
         private readonly ITagService _tagService;
+        private readonly UserUtils _userUtils;
 
-        public NewsArticlesController(INewsArticleService newsArticleService, ICategoryService categoryService, INewsTagService newsTagService, ITagService tagService)
+        public NewsArticlesController(INewsArticleService newsArticleService, ICategoryService categoryService, INewsTagService newsTagService, ITagService tagService, UserUtils userUtils)
         {
             _newsArticleService = newsArticleService;
             _categoryService = categoryService;
             _newsTagService = newsTagService;
             _tagService = tagService;
+            _userUtils = userUtils;
         }
 
         // GET: NewsArticles
         public async Task<IActionResult> Index()
         {
-            var id = 1;  //GetUserFromToken();
+            var id = _userUtils.GetUserFromToken();
             return View(await _newsArticleService.GetNewsArticlesByUserIdAsync(id));
 
         }
