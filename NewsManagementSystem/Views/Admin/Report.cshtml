@@ -1,18 +1,180 @@
 ﻿@model IEnumerable<DAL.Entities.NewsArticle>
 
 @{
-    ViewData["Title"] = "Report";
+    ViewData["Title"] = "News Articles Report";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>News Articles Report</h1>
+<style>
+    /* Styling for News Articles Report Page - Visual & Stylish Look */
 
-<p>
-    Generate a report of news articles created within a specific date range.
-</p>
+    /* Theme Variables - Consistent with other admin pages */
+    :root {
+        --primary-color: #0056b3;
+        --secondary-color: #6c757d;
+        --background-color: #f8f9fa;
+        --text-color: #343a40;
+        --accent-color: #ffc107;
+        --report-card-background: #ffffff;
+        --report-card-border: #dee2e6;
+        --report-card-border-radius: 8px;
+        --report-card-padding: 30px;
+        --report-page-max-width: 1000px; /* Wider for table */
+        --report-form-background: #f8f9fa; /* Slightly different background for form section */
+        --report-form-border: #dee2e6;
+        --report-form-border-radius: 7px;
+        --report-form-padding: 25px;
+        --form-label-color: var(--secondary-color);
+        --form-input-border-color: #ced4da;
+        --form-input-focus-border-color: var(--primary-color);
+        --form-input-box-shadow-focus: rgba(0, 86, 179, 0.25);
+        --form-group-margin-bottom: 20px;
+        --form-button-padding: 0.8rem 1.5rem;
+        --form-button-font-size: 1.1rem;
+        --form-button-border-radius: 0.3rem;
+        --report-table-header-background: #e9ecef; /* Light grey for table header */
+        --report-table-border-color: #dee2e6;
+        --report-table-row-hover-background: #f2f2f2; /* Light grey on row hover */
+        --no-data-message-color: var(--secondary-color);
+    }
 
-<div class="row">
-    <div class="col-md-6">
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .report-container {
+        max-width: var(--report-page-max-width);
+        margin: 30px auto;
+        padding: var(--report-card-padding);
+        background-color: var(--report-card-background);
+        border: 1px solid var(--report-card-border);
+        border-radius: var(--report-card-border-radius);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    p {
+        color: var(--text-color);
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .report-form-section {
+        background-color: var(--report-form-background);
+        border: 1px solid var(--report-form-border);
+        border-radius: var(--report-form-border-radius);
+        padding: var(--report-form-padding);
+        margin-bottom: 30px;
+    }
+
+    .form-group {
+        margin-bottom: var(--form-group-margin-bottom);
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: var(--form-label-color);
+            margin-bottom: 8px;
+        }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        padding: 0.7rem 1rem;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: var(--text-color);
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid var(--form-input-border-color);
+        appearance: none;
+        border-radius: 0.3rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+        .form-control:focus {
+            color: var(--text-color);
+            background-color: #fff;
+            border-color: var(--form-input-focus-border-color);
+            outline: 0;
+            box-shadow: 0 0 0 0.25rem var(--form-input-box-shadow-focus);
+        }
+
+    .btn-primary {
+        padding: var(--form-button-padding);
+        font-size: var(--form-button-font-size);
+        border-radius: var(--form-button-border-radius);
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+        transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    }
+
+        .btn-primary:hover {
+            background-color: darken(var(--primary-color), 10%);
+            border-color: darken(var(--primary-color), 10%);
+        }
+
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: var(--text-color);
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+        .table thead th {
+            background-color: var(--report-table-header-background);
+            border-bottom: 2px solid var(--report-table-border-color);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        .table tbody td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--report-table-border-color);
+        }
+
+        .table tbody tr:nth-of-type(odd) { /* Optional: Alternating row backgrounds */
+            background-color: rgba(0, 0, 0, 0.025);
+        }
+
+        .table tbody tr:hover {
+            background-color: var(--report-table-row-hover-background);
+        }
+
+        .table a { /* Style links in table */
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+            .table a:hover {
+                text-decoration: underline;
+            }
+
+    .no-data-message {
+        color: var(--no-data-message-color);
+        font-style: italic;
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="report-container">
+    <h1>News Articles Report</h1>
+
+    <p>
+        Generate a report of news articles created within a specific date range.
+    </p>
+
+    <div class="report-form-section">
         <form asp-action="Report" method="get">
             <div class="form-group">
                 <label for="startDate" class="control-label">Start Date</label>
@@ -27,55 +189,57 @@
             </div>
         </form>
     </div>
+
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.NewsTitle)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Headline)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreatedDate)
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NewsTitle)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Headline)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Category.CategoryDescription)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Lecturer" asp-route-id="@item.NewsArticleId">Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (Model != null)
+    {
+        <p class="no-data-message">No news articles found within the selected date range.</p>
+    }
 </div>
-
-<hr />
-
-@if (Model != null && Model.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.NewsTitle)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Headline)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CreatedDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Category.CategoryDescription)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NewsTitle)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Headline)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreatedDate)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category.CategoryDescription)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-controller="NewsArticles" asp-route-id="@item.NewsArticleId">Details</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else if (Model != null)
-{
-    <p>No news articles found within the selected date range.</p>
-}
