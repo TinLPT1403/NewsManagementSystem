@@ -160,9 +160,31 @@
 
 <h1>Manage System Accounts</h1>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<p class="create-new-button">
 <p class="create-new-account-button">
     <a asp-action="CreateAccount" class="btn btn-primary">Create New Account</a>
 </p>
+
+<div class="search-bar">
+    <form asp-action="SearchAccount" method="get">
+        <div class="input-group">
+            <input type="text" name="searchTerm" class="form-control" placeholder="Search by name or email" />
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+<br/>
 
 <div class="accounts-container">
     @foreach (var item in Model)

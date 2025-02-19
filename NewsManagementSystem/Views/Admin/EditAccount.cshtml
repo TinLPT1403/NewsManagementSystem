@@ -139,6 +139,15 @@
     }
 </style>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <div class="edit-account-container">
     <h1>Edit Account</h1>
 
