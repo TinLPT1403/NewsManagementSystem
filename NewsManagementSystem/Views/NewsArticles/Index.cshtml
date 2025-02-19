@@ -194,7 +194,7 @@
                         @contentPreview
                     </div>
                     <div class="news-meta">
-                        Published Date: @Html.DisplayFor(modelItem => item.ModifiedDate) | Source: @Html.DisplayFor(modelItem => item.NewsSource) | Category: @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                        Published Date: @Html.DisplayFor(modelItem => item.ModifiedDate) | Source: @Html.DisplayFor(modelItem => item.NewsSource) | Category: @Html.DisplayFor(modelItem => item.Category.CategoryName) | Author : @Html.DisplayFor(modelItem=> item.CreatedBy.AccountName)
                     </div>
                     <div class="news-actions">
                         <a asp-action="Details" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-info">Read More</a>
