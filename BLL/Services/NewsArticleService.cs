@@ -6,6 +6,7 @@ using DAL.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
@@ -27,12 +28,20 @@ namespace BLL.Services
         }
         public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto)
         {
+            var userId = GetUserFromToken();
+            Console.WriteLine("UserId: " + userId);
+            var user = await _unitOfWork.SystemAccounts.GetByIdAsync(userId); // Fetch user by ID
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("User not found.");
+            }
+
             // Ensure required fields are not empty
             if (string.IsNullOrWhiteSpace(dto.Headline))
             {
                 throw new ArgumentException("Headline is required.");
             }
-            var userId = 1;
+
             // Create new article
             var article = new NewsArticle
             {
@@ -75,7 +84,7 @@ namespace BLL.Services
         public async Task DeactiveNewsArticleAsync(string id)
         {
             var article = await _unitOfWork.NewsArticles.GetByIdAsync(id);
-            if(article != null)
+            if (article != null)
             {
                 article.NewsStatus = false;
                 await _unitOfWork.NewsArticles.UpdateAsync(article);
@@ -91,8 +100,8 @@ namespace BLL.Services
         public async Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId)
         {
 
-           return await _newsArticleRepository.GetActiveNewsArticlesByUserIdAsync(userId);
-            
+            return await _newsArticleRepository.GetActiveNewsArticlesByUserIdAsync(userId);
+
         }
 
         public async Task UpdateNewsArticleAsync(string id, NewsArticleUpdateDTO dto)
@@ -141,24 +150,40 @@ namespace BLL.Services
                 article.CategoryId = dto.CategoryId.Value;
             }
 
-            // Update tags if provided in the DTO (removing old ones and adding new ones)
-            if (dto.NewsTagIds != null && dto.NewsTagIds.Any())
+            // Update tags if provided in the DTO (preserving unmodified tags)
+            if (dto.NewsTagIds != null)
             {
-                // Remove old tags associated with the article
+                // Get existing tags for this article
                 var existingTags = await _unitOfWork.NewsTags
                     .GetAllByListAsync(nt => nt.NewsArticleId == id);
+                var existingTagIds = existingTags.Select(et => et.TagId).ToList();
 
-                _unitOfWork.NewsTags.RemoveRange(existingTags);
+                // Find tags to add (tags in the new list but not in existing tags)
+                var tagsToAdd = dto.NewsTagIds
+                    .Where(tagId => !existingTagIds.Contains(tagId))
+                    .ToList();
 
-                // Add new tags from the DTO
-                foreach (var tagId in dto.NewsTagIds)
+                // Find tags to remove (tags in existing tags but not in the new list)
+                var tagsToRemove = existingTags
+                    .Where(et => !dto.NewsTagIds.Contains(et.TagId))
+                    .ToList();
+
+                // Remove tags that are no longer needed
+                if (tagsToRemove.Any())
                 {
+                    _unitOfWork.NewsTags.RemoveRange(tagsToRemove);
+                }
+
+                // Add new tags
+                foreach (var tagId in tagsToAdd)
+                {
+                    // Verify the tag exists before adding it
                     var tag = await _unitOfWork.Tags.GetByIdAsync(tagId);
                     if (tag != null)
                     {
                         var newsTag = new NewsTag
                         {
-                            NewsArticleId = article.NewsArticleId,  // Assuming this is the existing article's ID
+                            NewsArticleId = article.NewsArticleId,
                             TagId = tagId,
                         };
                         await _unitOfWork.NewsTags.AddAsync(newsTag);
@@ -170,15 +195,24 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        private int GetUserFromToken()
+        private int? GetUserFromToken()
         {
-            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
+            // Retrieve token from the cookie
+            var token = _httpContextAccessor.HttpContext?.Request.Cookies["JwtToken"];
+            if (string.IsNullOrEmpty(token))
             {
-                throw new UnauthorizedAccessException("User is not authenticated.");
+                return null;
             }
 
-            return int.Parse(userIdClaim.Value);
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userIdClaim = jwtToken?.Claims.FirstOrDefault(c => c.Type == "NameIdentifier" || c.Type == "nameid");
+            if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return userId;
+            }
+            return null;
         }
+
     }
 }

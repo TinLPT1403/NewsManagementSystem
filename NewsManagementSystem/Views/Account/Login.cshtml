@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 10px;">
+        <h3 class="text-center text-primary mb-4"><i class="fas fa-sign-in-alt"></i> Login</h3>
+
+        <form method="post">
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-envelope"></i> Email:</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required />
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="form-label"><i class="fas fa-lock"></i> Password:</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter your password" required />
+            </div>
+
+            <!-- Login Button -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Login</button>
+            </div>
+        </form>
+
+        <!-- Error Message -->
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger mt-3" role="alert">
+                <i class="fas fa-exclamation-circle"></i> @ViewBag.Error
+            </div>
+        }
+
+        <!-- Register Link
+        <div class="text-center mt-3">
+            <small>Don't have an account? <a href="#" class="text-primary">Register here</a></small>
+        </div>
+         -->
+    </div>
+</div>

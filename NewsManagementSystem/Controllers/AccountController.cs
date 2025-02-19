@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,28 +26,30 @@ namespace NewsManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            // Validate email and password (use your own user service)
-            // For example purposes, assume a valid user is returned with a Role value.
-            string userRole = await ValidateUserAsync(email, password);
-            if (userRole == null)
+            // Get the JWT token
+            var token = await _accountService.AuthenticateAsync(email, password);
+
+            if (token == null)
             {
-                ModelState.AddModelError("", "Invalid credentials");
-                return View();
+                return Unauthorized();
             }
 
-            var claims = new[]
+            // Store the JWT in a secure HttpOnly cookie
+            var cookieOptions = new CookieOptions
             {
-                new Claim(ClaimTypes.Name, email),
-                new Claim(ClaimTypes.Role, userRole)
+                HttpOnly = true,  // Only accessible by the server-side (for security)
+                Secure = true,    // Only send the cookie over HTTPS (for security)
+                SameSite = SameSiteMode.Strict,  // Prevent CSRF attacks
+                Expires = DateTime.UtcNow.AddHours(1)  // Set expiration time
             };
 
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            await HttpContext.SignInAsync
-                (CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(identity));
+            // Store token in a cookie
+            Response.Cookies.Append("JwtToken", token, cookieOptions);
 
-            return RedirectToAction("Index", "News");
+            return RedirectToAction("Index", "NewsArticles");
         }
+
+
 
         // GET: /Account/Logout
         public async Task<IActionResult> Logout()
