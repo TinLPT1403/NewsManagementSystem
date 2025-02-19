@@ -32,7 +32,7 @@ namespace BLL.Services
             {
                 throw new ArgumentException("Headline is required.");
             }
-            var userId = 1;
+            var userId = GetUserFromToken();
             // Create new article
             var article = new NewsArticle
             {

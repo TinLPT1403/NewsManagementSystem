@@ -32,7 +32,7 @@ namespace NewsManagementSystem.Controllers
         // GET: NewsArticles
         public async Task<IActionResult> Index()
         {
-            var id = 1;  //GetUserFromToken();
+            var id = GetUserFromToken();
             return View(await _newsArticleService.GetNewsArticlesByUserIdAsync(id));
 
         }

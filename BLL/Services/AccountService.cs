@@ -26,11 +26,26 @@ namespace BLL.Services
 
         public async Task<string?> AuthenticateAsync(string email, string password)
         {
+            // Attempt to get the account from the database.
             var account = await _unitOfWork.SystemAccounts.GetByEmailAsync(email);
-            if (account == null) return null;
 
+            // If the account is not found, check if it matches the default admin credentials from appsettings.json.
+            if (account == null)
+            {
+                var adminEmail = _configuration["AdminAccount:Email"];
+                var adminPassword = _configuration["AdminAccount:Password"];
+                if (email.Equals(adminEmail, StringComparison.OrdinalIgnoreCase) && password == adminPassword)
+                {
+                    // Generate JWT token for default admin.
+                    return GenerateJwtToken(email, "Admin", "0"); // "0" is used as the default admin account ID.
+                }
+                return null;
+            }
+
+            // Validate the password for the retrieved account.
             if (account.AccountPassword != password) return null;
 
+            // Determine the role based on the account's role value.
             var role = account.AccountRole switch
             {
                 1 => "Admin",
@@ -38,8 +53,15 @@ namespace BLL.Services
                 3 => "Lecturer",
                 _ => string.Empty
             };
+
             if (string.IsNullOrEmpty(role)) return null;
 
+            return GenerateJwtToken(email, role, account.AccountId.ToString());
+        }
+
+        // Helper method to generate a JWT token.
+        private string GenerateJwtToken(string email, string role, string accountId)
+        {
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Secret"]);
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -48,7 +70,7 @@ namespace BLL.Services
                 {
                     new Claim(ClaimTypes.Name, email),
                     new Claim(ClaimTypes.Role, role),
-                    new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()) // Add user ID claim
+                    new Claim(ClaimTypes.NameIdentifier, accountId)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = _configuration["Jwt:Issuer"],
