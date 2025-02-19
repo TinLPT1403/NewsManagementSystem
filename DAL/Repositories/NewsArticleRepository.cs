@@ -25,21 +25,23 @@ namespace DAL.Repositories
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<NewsArticle>> GetNewsArticlesAsync()
+        public async Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync()
         {
             return await newsContext.NewsArticles
                 .Include(article => article.Category)   // Include Category to access CategoryDescription
                 .Include(article => article.CreatedBy)  // Include CreatedBy to access AccountId
                 .Include(article => article.UpdatedBy)  // Include UpdatedBy to access AccountId
+                .Where(article => article.NewsStatus == true)
                 .ToListAsync();
         }
-        public async Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId)
+        public async Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesByUserIdAsync(int userId)
         {
             return await newsContext.NewsArticles
                 .Where(article => article.CreatedBy.AccountId == userId)
                 .Include(article => article.Category)   // Include Category to access CategoryDescription
                 .Include(article => article.CreatedBy)  // Include CreatedBy to access AccountId
                 .Include(article => article.UpdatedBy)  // Include UpdatedBy to access AccountId
+                .Where(article => article.NewsStatus == true)
                 .ToListAsync();
         }
 

@@ -367,3 +367,4 @@ FodyWeavers.xsd
 /DAL/Migrations/20250216094445_Initial.Designer.cs
 /DAL/Migrations/NewsContextModelSnapshot.cs
 /DAL/Migrations/*
+/NewsManagementSystem/appsettings.json

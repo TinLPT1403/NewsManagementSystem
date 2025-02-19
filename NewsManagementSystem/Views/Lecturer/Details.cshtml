@@ -1,0 +1,106 @@
+﻿@model DAL.Entities.NewsArticle
+
+@{
+    ViewData["Title"] = "News Details"; // More reader-focused title
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Assuming you fixed _Layout.cshtml to not have navbar
+}
+
+<style>
+    /* Styling for News Details Page - Reader-Friendly Focus */
+
+    :root {
+        --primary-color: #0056b3;
+        --secondary-color: #6c757d;
+        --background-color: #f8f9fa;
+        --text-color: #343a40;
+        --accent-color: #ffc107;
+        --article-background: #ffffff;
+        --article-border: #dee2e6;
+        --meta-color: #6c757d;
+
+        --details-page-max-width: 800px; /* Max width for content area */
+        --details-page-padding: 20px;
+        --details-content-font-size: 1.1rem; /* Larger font for content */
+        --details-content-line-height: 1.7; /* Increased line height for readability */
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Reader-friendly font */
+        line-height: 1.6;
+    }
+
+    .details-container {
+        max-width: var(--details-page-max-width);
+        margin: 20px auto; /* Center the content container */
+        padding: var(--details-page-padding);
+        background-color: var(--article-background);
+        border: 1px solid var(--article-border);
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.05); /* Subtle shadow */
+    }
+
+    .news-title {
+        font-size: 2.5em; /* Larger and more prominent title */
+        color: var(--primary-color);
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .news-headline {
+        font-size: 1.3em;
+        font-style: italic;
+        color: var(--secondary-color);
+        margin-bottom: 20px;
+    }
+
+    .meta-info {
+        font-size: 0.95em;
+        color: var(--meta-color);
+        margin-bottom: 25px;
+        border-bottom: 1px solid var(--article-border); /* Separator line */
+        padding-bottom: 10px;
+    }
+
+    .news-content {
+        font-size: var(--details-content-font-size);
+        line-height: var(--details-content-line-height);
+        margin-bottom: 30px; /* More space after content */
+        white-space: pre-line; /* Preserve line breaks from NewsContent if any */
+    }
+
+    .action-buttons {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .action-buttons a, .action-buttons button {
+        margin-left: 10px;
+    }
+
+
+
+</style>
+
+<div class="details-container">
+    <h1 class="news-title">
+        @Html.DisplayFor(model => model.NewsTitle)
+    </h1>
+
+    <h2 class="news-headline">
+        @Html.DisplayFor(model => model.Headline)
+    </h2>
+
+    <p class="meta-info">
+        Published on: @Model.CreatedDate.ToString() | Category: @Model.Category?.CategoryDescription | Source: @Html.DisplayFor(model => model.NewsSource)
+    </p>
+
+    <div class="news-content">
+        @Html.Raw(Model.NewsContent)  @* Render HTML content if needed, otherwise use Html.DisplayTextFor *@
+    </div>
+
+    <div class="action-buttons">
+        <a asp-action="All" asp-controller="Lecturer" class="btn btn-secondary">Back to News List</a> @* Adjusted Back to List link *@
+    </div>
+</div>

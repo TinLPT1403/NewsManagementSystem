@@ -17,10 +17,14 @@ namespace DAL.Repositories
         {
             newsContext = context;
         }
-        public async Task<List<NewsArticle>> GetAllByCategoryIdAsync(int categoryId)
+        public async Task<IEnumerable<Category>> GetActiveCategories()
+        {
+            return await _newsContext.Categories.Where(c => c.IsActive == true).ToListAsync();
+        }
+        public async Task<IEnumerable<NewsArticle>> GetArticlesByCategoryIdAsync(int categoryId)
         {
             return await newsContext.NewsArticles
-                .Where(na => na.CategoryId == categoryId)
+                .Where(na => na.CategoryId == categoryId && na.Category.IsActive == true)
                 .ToListAsync();
         }
 
@@ -29,6 +33,6 @@ namespace DAL.Repositories
             newsContext.Categories.Remove(category);
             await newsContext.SaveChangesAsync();
         }
-        
+
     }
 }

@@ -72,7 +72,7 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task DeleteNewsArticleAsync(string id)
+        public async Task DeactiveNewsArticleAsync(string id)
         {
             var article = await _unitOfWork.NewsArticles.GetByIdAsync(id);
             if(article != null)
@@ -83,15 +83,15 @@ namespace BLL.Services
             }
         }
 
-        public async Task<IEnumerable<NewsArticle>> GetAllNewsArticlesAsync() => await _unitOfWork.NewsArticles.GetAllAsync();
+        public async Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync() => await _unitOfWork.NewsArticles.GetActiveNewsArticlesAsync();
 
 
-        public async Task<NewsArticle> GetNewsArticleAsync(string id) => await _unitOfWork.NewsArticles.GetByIdAsync(id);
+        public async Task<NewsArticle> GetNewsArticleByIdAsync(string id) => await _unitOfWork.NewsArticles.GetByIdAsync(id);
 
         public async Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId)
         {
 
-           return await _newsArticleRepository.GetNewsArticlesByUserIdAsync(userId);
+           return await _newsArticleRepository.GetActiveNewsArticlesByUserIdAsync(userId);
             
         }
 
