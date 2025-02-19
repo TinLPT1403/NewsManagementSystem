@@ -9,107 +9,116 @@
     /* Reusing and extending styles from Create view for Edit - Consistent Form Styling */
 
     :root {
-        --primary-color: #0056b3;
-        --secondary-color: #6c757d;
-        --background-color: #f8f9fa;
-        --text-color: #343a40;
-        --accent-color: #ffc107;
-        --form-card-background: #ffffff;
-        --form-card-border: #dee2e6;
-        --form-card-border-radius: 8px;
-        --form-label-color: var(--secondary-color);
-        --form-input-border-color: #ced4da;
-        --form-input-focus-border-color: var(--primary-color);
-        --form-input-box-shadow-focus: rgba(0, 86, 179, 0.25);
-        --form-group-margin-bottom: 20px;
+    --primary-color: #0056b3;
+    --secondary-color: #6c757d;
+    --background-color: #f8f9fa;
+    --text-color: #343a40;
+    --accent-color: #ffc107;
+    --form-card-background: #ffffff;
+    --form-card-border: #dee2e6;
+    --form-card-border-radius: 8px;
+    --form-label-color: var(--secondary-color);
+    --form-input-border-color: #ced4da;
+    --form-input-focus-border-color: var(--primary-color);
+    --form-input-box-shadow-focus: rgba(0, 86, 179, 0.25);
+    --form-group-margin-bottom: 20px;
     }
 
     body {
-        background-color: var(--background-color);
-        color: var(--text-color);
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     h1 {
-        color: var(--primary-color);
-        margin-bottom: 25px;
-        text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    text-align: center;
     }
 
     h4 {
-        color: var(--text-color);
-        margin-bottom: 15px;
+    color: var(--text-color);
+    margin-bottom: 15px;
     }
 
     .edit-form-container { /* Renamed container class for Edit view */
-        max-width: 900px;
-        margin: 20px auto;
-        padding: 30px;
-        background-color: var(--form-card-background);
-        border: 1px solid var(--form-card-border);
-        border-radius: var(--form-card-border-radius);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 30px;
+    background-color: var(--form-card-background);
+    border: 1px solid var(--form-card-border);
+    border-radius: var(--form-card-border-radius);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     }
 
     .form-group {
-        margin-bottom: var(--form-group-margin-bottom);
+    margin-bottom: var(--form-group-margin-bottom);
     }
 
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            color: var(--form-label-color);
-            margin-bottom: 8px;
-        }
+    .form-group label {
+    display: block;
+    font-weight: bold;
+    color: var(--form-label-color);
+    margin-bottom: 8px;
+    }
 
     .form-control {
-        display: block;
-        width: 100%;
-        padding: 0.75rem 1rem;
-        font-size: 1rem;
-        line-height: 1.5;
-        color: var(--text-color);
-        background-color: #fff;
-        background-clip: padding-box;
-        border: 1px solid var(--form-input-border-color);
-        appearance: none;
-        border-radius: 0.25rem;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid var(--form-input-border-color);
+    appearance: none;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
 
-        .form-control:focus {
-            color: var(--text-color);
-            background-color: #fff;
-            border-color: var(--form-input-focus-border-color);
-            outline: 0;
-            box-shadow: 0 0 0 0.25rem var(--form-input-box-shadow-focus);
-        }
+    .form-control:focus {
+    color: var(--text-color);
+    background-color: #fff;
+    border-color: var(--form-input-focus-border-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem var(--form-input-box-shadow-focus);
+    }
 
     .form-check {
-        padding-left: 1.5em;
-        margin-bottom: 0.5rem;
+    padding-left: 1.5em;
+    margin-bottom: 0.5rem;
     }
 
     .form-check-input {
-        margin-top: 0.3rem;
+    margin-top: 0.3rem;
     }
 
     .btn-primary {
-        padding: 0.8rem 1.5rem;
-        font-size: 1.1rem;
-        border-radius: 0.3rem;
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 0.3rem;
     }
 
     .text-danger {
-        font-size: 0.9rem;
-        margin-top: 4px;
-        display: block;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    display: block;
     }
 
     .form-group > .form-check:last-child {
-        margin-bottom: 0;
+    margin-bottom: 0;
     }
 </style>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
 
 <div class="edit-form-container">
     <h1>Edit News Article</h1>  <h4>Edit Article Details</h4>
@@ -149,21 +158,20 @@
             @foreach (var tag in ViewBag.Tags)
             {
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="NewsTagIds" value="@tag.TagId" id="tag-@tag.TagId"
-                    @(Model.NewsTagIds != null && Model.NewsTagIds.Contains(tag.TagId) ? "checked" : "") /> <label class="form-check-label" for="tag-@tag.TagId">@tag.TagName</label>
+                    <input class="form-check-input" type="checkbox" name="NewsTagIds" value="@tag.TagId" id="tag-@tag.TagId" @(ViewBag.NewsTag != null && ViewBag.NewsTag.Contains(tag.TagId) ? "checked" : "") />
+                    <label class="form-check-label" for="tag-@tag.TagId">@tag.TagName</label>
                 </div>
             }
             <span asp-validation-for="NewsTagIds" class="text-danger"></span>
-        </div>
         <div class="form-group">
             <input type="submit" value="Save Changes" class="btn btn-primary" />
         </div>
     </form>
+    <div>
+        <a asp-action="Index">Back to News List</a>
+    </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to News List</a>
-</div>
 
 @section Scripts {
     @{

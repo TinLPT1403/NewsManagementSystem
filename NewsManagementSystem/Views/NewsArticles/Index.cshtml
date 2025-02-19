@@ -169,15 +169,53 @@
 @*<body>*@
 <body>
 
-    <h1>News Feed</h1>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+    @if (TempData["NoResults"] != null)
+    {
+        <div class="alert alert-warning">@TempData["NoResults"]</div>
+    }
+
 
     <p class="create-new-button">
         <a asp-action="Create" class="btn btn-primary">Create New Article</a>
     </p>
+   
+    <hr/>
+
+    <h1 class="text-center">News Feed</h1>
+    
+    <div class="search-bar">
+        <form asp-action="Search" method="get" class="d-flex">
+            <input type="text" name="searchTerm" class="form-control me-2" placeholder="Search by title or headline" />
+            <select name="categoryId" class="form-control me-2" asp-items="ViewBag.CategoryId">
+                <option value="">-- Select Category --</option>
+            </select>
+            <select name="tagId" class="form-control me-2" asp-items="ViewBag.TagId">
+                <option value="">-- Select Tag --</option>
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+         </form>
+    </div>
+
+    <hr/>
+
 
     <div class="news-container">
-        @foreach (var item in Model)
+        @if (!Model.Any())
         {
+            <div class="alert alert-info">No articles found.</div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
                 <div class="news-article">
                     <h2>
                         @Html.DisplayFor(modelItem => item.NewsTitle)
@@ -185,7 +223,7 @@
                     <h3>
                         @Html.DisplayFor(modelItem => item.Headline)
                     </h3>
-                    
+
                     <div class="news-content-preview">
                         @{
                             // Create a preview of the news content, e.g., first 100 characters
@@ -202,6 +240,7 @@
                         <a asp-action="Delete" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-danger">Delete</a>
                     </div>
                 </div>
+            }
         }
     </div>
 </body>

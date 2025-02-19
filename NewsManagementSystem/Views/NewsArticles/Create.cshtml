@@ -113,7 +113,17 @@
 
 </style>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <div class="create-form-container">
+
     <h1>Create News Article</h1>
 
     <h4>News Article Details</h4>
