@@ -62,7 +62,13 @@ namespace NewsManagementSystem.Controllers
             var principal = new ClaimsPrincipal(claimsIdentity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
             // Store the new token in a cookie
-            // Response.Cookies.Append("JwtToken", token, cookieOptions);
+            Response.Cookies.Append("JwtToken", token, new CookieOptions
+            {
+                HttpOnly = true,  // Only accessible by the server-side (for security)
+                Secure = true,    // Only send the cookie over HTTPS (for security)
+                SameSite = SameSiteMode.Strict,  // Prevent CSRF attacks
+                Expires = DateTime.UtcNow.AddHours(1)  // Set expiration time for the new token
+            });
 
             // Use the role from the user object directly instead of fetching it from the old token
             int role = user.AccountRole;
