@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NewsManagementSystem.Controllers
 {
-   // [Authorize(Roles = "Admin")]
+   [Authorize(Roles = "3")]
     public class AdminController : Controller
     {
         private readonly IAccountService _accountService;

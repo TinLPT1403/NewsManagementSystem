@@ -70,7 +70,8 @@ namespace NewsManagementSystem
                     ValidateAudience = true,
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.Zero,
+                    RoleClaimType = "role",
                 };
             });
 
