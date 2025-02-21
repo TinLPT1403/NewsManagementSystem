@@ -42,21 +42,27 @@ namespace NewsManagementSystem.Controllers
             }
 
             // Define cookie options for the new token
-            var cookieOptions = new CookieOptions
+            var authProperties = new AuthenticationProperties
             {
-                HttpOnly = true,  // Only accessible by the server-side (for security)
-                Secure = true,    // Only send the cookie over HTTPS (for security)
-                SameSite = SameSiteMode.Strict,  // Prevent CSRF attacks
-                Expires = DateTime.UtcNow.AddHours(1)  // Set expiration time for the new token
+                ExpiresUtc = DateTimeOffset.UtcNow.AddHours(1),
+                IsPersistent = true
             };
 
             // Retrieve user account details after authentication
             var user = await _accountService.GetAccountByIdAsync(_userUtils.GetUserFromInputToken(token));
 
+            var claims = new List<Claim>
+                {
+                new Claim(ClaimTypes.NameIdentifier, user.AccountId.ToString()),
+                new Claim(ClaimTypes.Name, user.AccountName),
+                new Claim(ClaimTypes.Role, user.AccountRole.ToString())
+                };
 
-
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(claimsIdentity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, authProperties);
             // Store the new token in a cookie
-            Response.Cookies.Append("JwtToken", token, cookieOptions);
+            // Response.Cookies.Append("JwtToken", token, cookieOptions);
 
             // Use the role from the user object directly instead of fetching it from the old token
             int role = user.AccountRole;
@@ -93,7 +99,7 @@ namespace NewsManagementSystem.Controllers
         // GET: /Account/Logout
         public async Task<IActionResult> Logout()
         {
-           // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
 
