@@ -47,21 +47,20 @@ namespace NewsManagementSystem
             //    });
 
             // JWT token authentication for API endpoints (optional)
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Account/Login";
-                    options.LogoutPath = "/Account/Logout";
-                    options.AccessDeniedPath = "/Account/AccessDenied";
-                });
             builder.Services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
+                options.AccessDeniedPath = "/Account/AccessDenied";
             })
             .AddJwtBearer(options =>
             {
-                var secretKey = builder.Configuration["Jwt:Secret"]; // Get JWT Secret Key
+                var secretKey = builder.Configuration["Jwt:Secret"];
                 options.TokenValidationParameters.RoleClaimType = "role";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -71,7 +70,7 @@ namespace NewsManagementSystem
                     ValidateAudience = true,
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     ValidAudience = builder.Configuration["Jwt:Audience"],
-                    ClockSkew = TimeSpan.Zero // Reduce default clock skew for testing
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 
