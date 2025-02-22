@@ -41,7 +41,7 @@ namespace NewsManagementSystem.Controllers
 
         // POST: /Admin/CreateAccount
         [HttpPost]
-        public async Task<IActionResult> Register(SystemAccount account)
+        public async Task<IActionResult> CreateAccount(SystemAccount account)
         {
             if (ModelState.IsValid)
             {

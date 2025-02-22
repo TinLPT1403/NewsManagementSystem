@@ -107,7 +107,7 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> Logout()
         {
             // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Guest", "All");
+            return RedirectToAction("All", "Guest");
         }
 
         private async Task<string> ValidateUserAsync(string email, string password)
