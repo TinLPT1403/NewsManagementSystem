@@ -86,5 +86,7 @@ namespace BLL.Services
             _unitOfWork.SystemAccounts.Delete(account);
             await _unitOfWork.SaveChangesAsync();
         }
+
+      
     }
 }

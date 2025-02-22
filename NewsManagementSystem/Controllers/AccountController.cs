@@ -38,7 +38,8 @@ namespace NewsManagementSystem.Controllers
             var token = await _accountService.AuthenticateAsync(email, password);
             if (token == null)
             {
-                return Unauthorized();
+                TempData["Error"] = "Invalid email or password.";
+                return RedirectToAction("Login", "Account");
             }
 
             // Define cookie options for the new token
@@ -106,7 +107,7 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> Logout()
         {
             // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Guest", "All");
         }
 
         private async Task<string> ValidateUserAsync(string email, string password)
