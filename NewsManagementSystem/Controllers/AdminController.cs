@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NewsManagementSystem.Controllers
 {
-   [Authorize(Roles = "3")]
+    [Authorize(Policy = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAccountService _accountService;
@@ -25,9 +25,9 @@ namespace NewsManagementSystem.Controllers
             return View(accounts);
         }
 
-        public async Task<IActionResult> DetailsAccount(int id) 
-        { 
-        
+        public async Task<IActionResult> DetailsAccount(int id)
+        {
+
             var account = await _accountService.GetAccountByIdAsync(id);
             if (account == null) return NotFound();
             return View(account);
@@ -98,7 +98,7 @@ namespace NewsManagementSystem.Controllers
             var reportData = await _unitOfWork.NewsArticles.GetAllByListAsync(n => n.CreatedDate >= startDate &&
                                                                                     n.CreatedDate <= endDate);
             return View(reportData);
-            
+
         }
 
         // POST: /Admin/GenerateReport
@@ -106,8 +106,8 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> GenerateReport()
         {
             // Implement your report creation logic using the DAL and BLL services.
-          /*  var reportData = await _unitOfWork.NewsArticles.GetByConditionAsync(n => n.CreatedDate >= startDate && 
-                                                                                     n.CreatedDate <= endDate); // Replace with actual data*/
+            /*  var reportData = await _unitOfWork.NewsArticles.GetByConditionAsync(n => n.CreatedDate >= startDate && 
+                                                                                       n.CreatedDate <= endDate); // Replace with actual data*/
             return View();
         }
 

@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace NewsManagementSystem.Controllers
 {
-    //[Authorize(Roles = "Staff")]
+    [Authorize(Policy = "Staff")]
     public class StaffController : Controller
     {
         private readonly ICategoryService _categoryService;

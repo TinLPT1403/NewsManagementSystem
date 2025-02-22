@@ -1,9 +1,11 @@
 ﻿using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NewsManagementSystem.Controllers
 {
+    [Authorize(Policy = "Lecturer")]
     public class LecturerController : Controller
     {
         private readonly INewsArticleService _newsArticleService;
