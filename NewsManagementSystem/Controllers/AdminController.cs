@@ -33,14 +33,14 @@ namespace NewsManagementSystem.Controllers
             return View(account);
         }
         // GET: /Admin/CreateAccount
-        public IActionResult Register()
+        public IActionResult CreateAccount()
         {
             return View();
         }
 
         // POST: /Admin/CreateAccount
         [HttpPost]
-        public async Task<IActionResult> Register(SystemAccount account)
+        public async Task<IActionResult> CreateAccount(SystemAccount account)
         {
             if (ModelState.IsValid)
             {
