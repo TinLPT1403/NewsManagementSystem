@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NewsManagementSystem.Controllers
 {
-   [Authorize(Roles = "3")]
+    [Authorize(Roles = "3")]
     public class AdminController : Controller
     {
         private readonly IAccountService _accountService;
@@ -35,6 +35,12 @@ namespace NewsManagementSystem.Controllers
         }
         // GET: /Admin/CreateAccount
         public IActionResult Register()
+        {
+            return View();
+        }
+
+        // GET: /Admin/CreateAccount
+        public IActionResult CreateAccount()
         {
             return View();
         }

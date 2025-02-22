@@ -31,6 +31,8 @@ namespace DAL.Repositories
                 .Include(article => article.Category)   // Include Category to access CategoryDescription
                 .Include(article => article.CreatedBy)  // Include CreatedBy to access AccountId
                 .Include(article => article.UpdatedBy)  // Include UpdatedBy to access AccountId
+                .Include(article => article.NewsTags)
+                .ThenInclude(newstags => newstags.Tag)
                 .Where(article => article.NewsStatus == true)
                 .ToListAsync();
         }
@@ -41,6 +43,8 @@ namespace DAL.Repositories
                 .Include(article => article.Category)   // Include Category to access CategoryDescription
                 .Include(article => article.CreatedBy)  // Include CreatedBy to access AccountId
                 .Include(article => article.UpdatedBy)  // Include UpdatedBy to access AccountId
+                .Include(article => article.NewsTags)
+                .ThenInclude(newstags => newstags.Tag)
                 .Where(article => article.NewsStatus == true)
                 .ToListAsync();
         }

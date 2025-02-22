@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<DAL.Entities.NewsArticle> 
-    
-   @{
+
+@{
     ViewData["Title"] = "News Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,158 +8,158 @@
 <style>
     /* Theme Variables - Customize these to change the theme */
     :root {
-        --primary-color: #007bff; /* Example primary color (like buttons) */
-        --secondary-color: #6c757d; /* Example secondary color */
-        --background-color: #f8f9fa; /* Light background */
-        --text-color: #343a40; /* Dark text */
-        --accent-color: #ffc107; /* Example accent color (like warnings) */
-        --article-background: #ffffff; /* Article background */
-        --article-border: #dee2e6; /* Article border color */
-        --meta-color: #6c757d; /* Meta text color */
+    --primary-color: #007bff; /* Example primary color (like buttons) */
+    --secondary-color: #6c757d; /* Example secondary color */
+    --background-color: #f8f9fa; /* Light background */
+    --text-color: #343a40; /* Dark text */
+    --accent-color: #ffc107; /* Example accent color (like warnings) */
+    --article-background: #ffffff; /* Article background */
+    --article-border: #dee2e6; /* Article border color */
+    --meta-color: #6c757d; /* Meta text color */
     }
 
     body {
-        background-color: var(--background-color);
-        color: var(--text-color);
-        font-family: sans-serif; /* Example font */
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: sans-serif; /* Example font */
     }
 
     h1, h2, h3 {
-        color: var(--text-color);
+    color: var(--text-color);
     }
 
     .btn-primary {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
     }
 
     .btn-primary:hover {
-        background-color: darken(var(--primary-color), 10%); /* Example hover effect - function needs to be defined or replaced with specific color */
-        border-color: darken(var(--primary-color), 10%); /* Example hover effect */
+    background-color: darken(var(--primary-color), 10%); /* Example hover effect - function needs to be defined or replaced with specific color */
+    border-color: darken(var(--primary-color), 10%); /* Example hover effect */
     }
 
     .btn-warning {
-        background-color: var(--accent-color);
-        border-color: var(--accent-color);
-        color: var(--text-color); /* Ensure text is visible on warning button */
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--text-color); /* Ensure text is visible on warning button */
     }
 
     .btn-warning:hover {
-        background-color: darken(var(--accent-color), 10%);
-        border-color: darken(var(--accent-color), 10%);
+    background-color: darken(var(--accent-color), 10%);
+    border-color: darken(var(--accent-color), 10%);
     }
 
     .btn-info {
-        background-color: var(--secondary-color);
-        border-color: var(--secondary-color);
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
     }
 
     .btn-info:hover {
-        background-color: darken(var(--secondary-color), 10%);
-        border-color: darken(var(--secondary-color), 10%);
+    background-color: darken(var(--secondary-color), 10%);
+    border-color: darken(var(--secondary-color), 10%);
     }
 
     .btn-danger {
-        background-color: #dc3545; /* Default danger color - could also be a theme variable */
-        border-color: #dc3545;
+    background-color: #dc3545; /* Default danger color - could also be a theme variable */
+    border-color: #dc3545;
     }
 
     .btn-danger:hover {
-        background-color: darken(#dc3545, 10%);
-        border-color: darken(#dc3545, 10%);
+    background-color: darken(#dc3545, 10%);
+    border-color: darken(#dc3545, 10%);
     }
 
 
     .news-container {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     }
 
     .news-article {
-        border: 1px solid var(--article-border);
-        margin-bottom: 20px;
-        padding: 15px;
-        border-radius: 5px;
-        background-color: var(--article-background);
+    border: 1px solid var(--article-border);
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: var(--article-background);
     }
 
     .news-article h2 {
-        margin-top: 0;
-        margin-bottom: 10px;
-        color: var(--text-color);
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--text-color);
     }
 
     .news-article h3 {
-        margin-top: 0;
-        margin-bottom: 15px;
-        color: var(--secondary-color);
-        font-size: 1.2em;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: var(--secondary-color);
+    font-size: 1.2em;
     }
 
     .news-article .news-meta {
-        font-size: 0.9em;
-        color: var(--meta-color);
-        margin-bottom: 10px;
+    font-size: 0.9em;
+    color: var(--meta-color);
+    margin-bottom: 10px;
     }
 
     .news-article .news-content-preview {
-        margin-bottom: 15px;
-        color: var(--text-color);
+    margin-bottom: 15px;
+    color: var(--text-color);
     }
 
     .news-actions {
-        text-align: right;
+    text-align: right;
     }
 
     .news-actions a {
-        margin-left: 5px;
+    margin-left: 5px;
     }
 
     .create-new-button {
-        margin-bottom: 20px;
+    margin-bottom: 20px;
     }
 
     /* Dark Theme Example - Uncomment to switch to dark theme */
     /*.dark-theme {
-        --primary-color: #00aaff;
-        --secondary-color: #adb5bd;
-        --background-color: #343a40; !* Dark background *!
-        --text-color: #f8f9fa; !* Light text *!
-        --accent-color: #ffdd57;
-        --article-background: #495057;
-        --article-border: #6c757d;
-        --meta-color: #adb5bd;
+    --primary-color: #00aaff;
+    --secondary-color: #adb5bd;
+    --background-color: #343a40; !* Dark background *!
+    --text-color: #f8f9fa; !* Light text *!
+    --accent-color: #ffdd57;
+    --article-background: #495057;
+    --article-border: #6c757d;
+    --meta-color: #adb5bd;
     }
 
     body.dark-theme {
-        background-color: var(--background-color);
-        color: var(--text-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
     }
 
     .dark-theme h1, .dark-theme h2, .dark-theme h3 {
-        color: var(--text-color);
+    color: var(--text-color);
     }
 
     .dark-theme .news-article {
-        background-color: var(--article-background);
-        border-color: var(--article-border);
+    background-color: var(--article-background);
+    border-color: var(--article-border);
     }
 
     .dark-theme .news-article h2 {
-        color: var(--text-color);
+    color: var(--text-color);
     }
 
     .dark-theme .news-article h3 {
-        color: var(--secondary-color);
+    color: var(--secondary-color);
     }
 
     .dark-theme .news-article .news-meta {
-        color: var(--meta-color);
+    color: var(--meta-color);
     }
 
     .dark-theme .news-article .news-content-preview {
-        color: var(--text-color);
+    color: var(--text-color);
     }*/
 
 
@@ -186,11 +186,11 @@
     <p class="create-new-button">
         <a asp-action="Create" class="btn btn-primary">Create New Article</a>
     </p>
-   
+
     <hr/>
 
     <h1 class="text-center">News Feed</h1>
-    
+
     <div class="search-bar">
         <form asp-action="Search" method="get" class="d-flex">
             <input type="text" name="searchTerm" class="form-control me-2" placeholder="Search by title or headline" />
@@ -201,7 +201,7 @@
                 <option value="">-- Select Tag --</option>
             </select>
             <button type="submit" class="btn btn-primary">Search</button>
-         </form>
+        </form>
     </div>
 
     <hr/>
@@ -234,6 +234,10 @@
                     <div class="news-meta">
                         Published Date: @Html.DisplayFor(modelItem => item.ModifiedDate) | Source: @Html.DisplayFor(modelItem => item.NewsSource) | Category: @Html.DisplayFor(modelItem => item.Category.CategoryName) | Author : @Html.DisplayFor(modelItem=> item.CreatedBy.AccountName)
                     </div>
+                    @foreach (var a in item.NewsTags)
+                    {
+                        <button type="button" class="btn btn-outline-primary">@a.Tag.TagName</button>
+                    }
                     <div class="news-actions">
                         <a asp-action="Details" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-info">Read More</a>
                         <a asp-action="Edit" asp-route-id="@item.NewsArticleId" class="btn btn-sm btn-warning">Edit</a>

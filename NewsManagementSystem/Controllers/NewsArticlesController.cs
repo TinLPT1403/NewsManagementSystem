@@ -38,7 +38,8 @@ namespace NewsManagementSystem.Controllers
             var id = _userUtils.GetUserFromToken();
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName");
             ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName");
-            return View(await _newsArticleService.GetNewsArticlesByUserIdAsync(id));
+            var list = await _newsArticleService.GetNewsArticlesByUserIdAsync(id);  
+            return View(list);
 
         }
 
@@ -57,6 +58,11 @@ namespace NewsManagementSystem.Controllers
             {
                 return NotFound();
             }
+
+            var tags = _newsTagService.GetTagsOfArticleAsync(newsArticle.NewsArticleId)
+                .Result.Select(t => t.TagName).ToList();
+            // Pass the tags to the view using ViewBag
+            ViewBag.Tags = tags;
 
             return View(newsArticle);
         }

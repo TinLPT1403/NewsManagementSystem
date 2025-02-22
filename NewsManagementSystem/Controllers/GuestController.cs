@@ -18,7 +18,8 @@ namespace NewsManagementSystem.Controllers
         }
         public async Task<IActionResult> All()
         {
-            return View( await _newsArticleService.GetActiveNewsArticlesAsync());
+            var list = await _newsArticleService.GetActiveNewsArticlesAsync();
+            return View(list);
         }
 
         // GET: GuestController/Details/

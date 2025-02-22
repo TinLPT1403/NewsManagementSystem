@@ -93,14 +93,13 @@ namespace BLL.Services
             }
         }
 
-        public async Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync() => await _unitOfWork.NewsArticles.GetActiveNewsArticlesAsync();
+        public async Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync() => await _newsArticleRepository.GetActiveNewsArticlesAsync();
 
 
         public async Task<NewsArticle> GetNewsArticleByIdAsync(string id) => await _newsArticleRepository.GetNewsArticleByIdAsync(id);
 
         public async Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId)
         {
-
             return await _newsArticleRepository.GetActiveNewsArticlesByUserIdAsync(userId);
 
         }
