@@ -68,8 +68,8 @@ namespace NewsManagementSystem
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Lecturer", policy => policy.RequireRole("1", "2", "3"));
-                options.AddPolicy("Staff", policy => policy.RequireRole("2", "3"));
+                options.AddPolicy("Staff", policy => policy.RequireRole("1", "3"));
+                options.AddPolicy("Lecturer", policy => policy.RequireRole("2", "1", "3"));
                 options.AddPolicy("Admin", policy => policy.RequireRole("3"));
             });
 

@@ -146,7 +146,8 @@ namespace NewsManagementSystem.Controllers
         // GET: /Staff/MyProfile
         public async Task<IActionResult>  MyProfile()
         {
-            var userId = 1;
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.NameIdentifier)?.Value;
+            var userId = int.Parse(userIdClaim);
             var user = await _accountService.GetAccountByIdAsync(userId); 
             return View(user);
         }

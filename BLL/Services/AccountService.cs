@@ -33,9 +33,9 @@ namespace BLL.Services
 
             var role = account.AccountRole switch
             {
-                3 => "Admin",
                 1 => "Staff",
                 2 => "Lecturer",
+                3 => "Admin",
                 _ => string.Empty
             };
             if (string.IsNullOrEmpty(role)) return null;
