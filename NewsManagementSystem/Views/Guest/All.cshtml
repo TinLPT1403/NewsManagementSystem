@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "All News";
-    Layout = "~/Views/Shared/_LayoutLecturer.cshtml";
+    Layout = "~/Views/Shared/_LayoutGuest.cshtml";
 }
 
 <style>
@@ -99,11 +99,7 @@
             </p>
             <div class="article-content">
                 @* Display a limited amount of content - adjust length as needed *@
-                @Html.Raw(item.NewsContent.Length > 200 ? item.NewsContent.Substring(0, 50) + "..." : item.NewsContent)
-            </div>
-            <div class="article-actions">
-                <a asp-action="Details" asp-controller="Lecturer" asp-route-id="@item.NewsArticleId" class="btn btn-primary btn-sm">Read More</a>
-               
+                @Html.Raw(item.NewsContent.Length > 50 ? item.NewsContent.Substring(0, 50) + "..." : item.NewsContent)
             </div>
         </div>
     }

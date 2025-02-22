@@ -11,11 +11,12 @@ namespace NewsManagementSystem.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IUnitOfWork _unitOfWork;
-        public AdminController(IAccountService accountService, IUnitOfWork unitOfWork)
+        private readonly INewsArticleService _newsArticleService;
+        public AdminController(IAccountService accountService, IUnitOfWork unitOfWork, INewsArticleService newsArticleService)
         {
             _accountService = accountService;
             _unitOfWork = unitOfWork;
-
+            _newsArticleService = newsArticleService;
         }
 
         // GET: /Admin/ManageAccounts
@@ -103,12 +104,10 @@ namespace NewsManagementSystem.Controllers
 
         // POST: /Admin/GenerateReport
         [HttpPost]
-        public async Task<IActionResult> GenerateReport()
+        public async Task<IActionResult> GenerateReport(DateTime startDate, DateTime endDate)
         {
-            // Implement your report creation logic using the DAL and BLL services.
-            /*  var reportData = await _unitOfWork.NewsArticles.GetByConditionAsync(n => n.CreatedDate >= startDate && 
-                                                                                       n.CreatedDate <= endDate); // Replace with actual data*/
-            return View();
+            var reportData = await _newsArticleService.GenerateReport(startDate, endDate);
+            return View(reportData);
         }
 
         // GET: /Admin/SearchAccount

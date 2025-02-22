@@ -15,5 +15,7 @@ namespace BLL.Interfaces
         Task CreateAccountAsync(SystemAccount account);
         Task UpdateAccountAsync(int id, SystemAccount account);
         Task DeleteAccountAsync(int id);
+
+        
     }
 }

@@ -195,6 +195,11 @@ namespace BLL.Services
             // Save the changes to the database
             await _unitOfWork.SaveChangesAsync();
         }
+        public async Task<IEnumerable<NewsArticle>> GenerateReport(DateTime startDate, DateTime endDate)
+        {
+            
+            return (IEnumerable<NewsArticle>)await _unitOfWork.NewsArticles.GetByConditionAsync(a => a.ModifiedDate >= startDate && a.ModifiedDate <= endDate);
+        }
 
     }
 }

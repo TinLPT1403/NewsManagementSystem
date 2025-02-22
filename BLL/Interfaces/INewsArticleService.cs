@@ -17,5 +17,7 @@ namespace BLL.Interfaces
         Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync();
         Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId);
 
+        Task<IEnumerable<NewsArticle>> GenerateReport(DateTime startDate, DateTime endDate);
+
     }
 }
