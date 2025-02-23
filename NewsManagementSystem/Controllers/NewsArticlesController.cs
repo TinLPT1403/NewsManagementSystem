@@ -35,10 +35,9 @@ namespace NewsManagementSystem.Controllers
         // GET: NewsArticles
         public async Task<IActionResult> Index()
         {
-            var id = _userUtils.GetUserFromToken();
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName");
             ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName");
-            var list = await _newsArticleService.GetNewsArticlesByUserIdAsync(id);  
+            var list = await _newsArticleService.GetAllNewsArticlesAsync();
             return View(list);
 
         }
@@ -89,7 +88,7 @@ namespace NewsManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                await _newsArticleService.CreateNewsArticleAsync(newsArticle);
+                await _newsArticleService.CreateNewsArticleAsync(newsArticle, HttpContext);
                 TempData["Message"] = "Article created successfully.";
                 return RedirectToAction(nameof(Index), "NewsArticles");
             }
@@ -139,7 +138,7 @@ namespace NewsManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _newsArticleService.UpdateNewsArticleAsync(id, newsArticle);
+                await _newsArticleService.UpdateNewsArticleAsync(id, newsArticle, HttpContext);
                 TempData["Message"] = "Article updated successfully.";
                 return RedirectToAction(nameof(Index));
             }

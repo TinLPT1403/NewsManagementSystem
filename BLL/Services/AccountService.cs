@@ -26,28 +26,16 @@ namespace BLL.Services
             _configuration = configuration;
         }
 
-        public async Task<string?> AuthenticateAsync(string email, string password)
+        public async Task<SystemAccount?> AuthenticateAsync(string email, string password)
         {
             var account = await _unitOfWork.SystemAccounts.GetByEmailAsync(email);
             if (account == null) return null;
 
             if (!PasswordUtils.VerifyPassword(password, account.AccountPasswordHash.ToString())) return null;
 
-            var role = account.AccountRole switch
-            {
-                1 => "Staff",
-                2 => "Lecturer",
-                3 => "Admin",
-                _ => string.Empty
-            };
-            if (string.IsNullOrEmpty(role)) return null;
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Name, email));
-            claims.Add(new Claim(ClaimTypes.Role, role));
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()));
 
-            var token = TokenService.GenerateToken(claims);
-            return token;
+
+            return account;
         }
 
         public async Task<IEnumerable<SystemAccount>> GetAllAccountsAsync()
@@ -55,12 +43,17 @@ namespace BLL.Services
             return await _unitOfWork.SystemAccounts.GetAllAsync();
         }
 
+        public async Task<IEnumerable<SystemAccount>> GetAllAccountsForManageAsync()
+        {
+            return await _unitOfWork.SystemAccounts.GetAllForManage();
+        }
+
         public async Task<SystemAccount> GetAccountByIdAsync(int id)
         {
             return await _unitOfWork.SystemAccounts.GetByIdAsync(id);
         }
 
-        public async Task CreateAccountAsync(AccountDTO dto)
+        public async Task CreateAccountAsync(AccountCreateDTO dto)
         {
             var account = new SystemAccount
             {
@@ -73,9 +66,16 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task CreateAccountAsync(SystemAccount account)
+        public async Task CreateAccountAsync(AccountCreateAdminDTO dto)
         {
-            account.AccountPasswordHash = PasswordUtils.HashPassword(account.AccountPasswordHash);
+            var account = new SystemAccount
+            {
+                AccountName = dto.AccountName,
+                AccountEmail = dto.AccountEmail,
+                AccountRole = dto.AccountRole,
+                AccountPasswordHash = PasswordUtils.HashPassword(dto.Password)
+            };
+
             await _unitOfWork.SystemAccounts.AddAsync(account);
             await _unitOfWork.SaveChangesAsync();
         }
@@ -104,7 +104,7 @@ namespace BLL.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateAccountAsync(int id, SystemAccount account)
+        public async Task UpdateAccountAsync(int id, AccountUpdateAdminDTO account)
         {
             var existingAccount = await _unitOfWork.SystemAccounts.GetByIdAsync(id);
             if (existingAccount == null) throw new KeyNotFoundException("Account not found.");
@@ -119,11 +119,14 @@ namespace BLL.Services
                 existingAccount.AccountEmail = account.AccountEmail;
             }
 
-            existingAccount.AccountRole = (int)account.AccountRole;
-
-            if (!string.IsNullOrEmpty(account.AccountPasswordHash))
+            if(account.AccountRole.HasValue)
             {
-                existingAccount.AccountPasswordHash = PasswordUtils.HashPassword(account.AccountPasswordHash);
+                existingAccount.AccountRole = account.AccountRole.Value;
+            }
+
+            if (!string.IsNullOrEmpty(account.Password))
+            {
+                existingAccount.AccountPasswordHash = PasswordUtils.HashPassword(account.Password);
             }
 
             await _unitOfWork.SystemAccounts.UpdateAsync(existingAccount);

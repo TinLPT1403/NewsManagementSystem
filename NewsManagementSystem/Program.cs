@@ -24,8 +24,8 @@ namespace NewsManagementSystem
             {
                 cfg.AddMaps(typeof(Program).Assembly); // Or Assembly containing your profiles
             });
-            var mapper = config.CreateMapper();
-            builder.Services.AddSingleton(mapper);
+            builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

@@ -127,6 +127,14 @@
                 <td>@Model.CreatedBy!.AccountEmail</td>
             </tr>
             <tr>
+                <td>Modified by:</td>
+                <td>@Model.UpdatedBy!.AccountName</td>
+            </tr>
+            <tr>
+                <td>Modified Date:</td>
+                <td>@Model.ModifiedDate</td>
+            </tr>
+            <tr>
                 <td>Content:</td>
                 <td>@Html.Raw(Model.NewsContent)</td>
             </tr>

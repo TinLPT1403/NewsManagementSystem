@@ -15,5 +15,6 @@ namespace DAL.Interfaces
         Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesByUserIdAsync(int userId);
 
         Task<NewsArticle> GetNewsArticleByIdAsync(string id);
+        Task<IEnumerable<NewsArticle>> GetAllArticlesAsync();
     }
 }

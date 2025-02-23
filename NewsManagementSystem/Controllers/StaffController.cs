@@ -47,7 +47,7 @@ namespace NewsManagementSystem.Controllers
         public async Task<IActionResult> CreateCategory(CategoryDTO dto)
         {
             if (ModelState.IsValid)
-            { 
+            {
                 var category = _mapper.Map<Category>(dto);
                 await _categoryService.CreateCategoryAsync(category);
                 return RedirectToAction(nameof(ManageCategories));
@@ -109,7 +109,7 @@ namespace NewsManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _newsArticleService.CreateNewsArticleAsync(dto);
+                await _newsArticleService.CreateNewsArticleAsync(dto, HttpContext);
                 return RedirectToAction(nameof(ManageNewsArticles));
             }
             return View(dto);
@@ -129,7 +129,7 @@ namespace NewsManagementSystem.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _newsArticleService.UpdateNewsArticleAsync(id, dto);
+                await _newsArticleService.UpdateNewsArticleAsync(id, dto, HttpContext);
                 return RedirectToAction(nameof(ManageNewsArticles));
             }
             return View(dto);
@@ -144,26 +144,26 @@ namespace NewsManagementSystem.Controllers
         }
 
         // GET: /Staff/MyProfile
-        public async Task<IActionResult>  MyProfile()
+        public async Task<IActionResult> MyProfile()
         {
-            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.NameIdentifier)?.Value;
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             var userId = int.Parse(userIdClaim);
-            var user = await _accountService.GetAccountByIdAsync(userId); 
+            var user = _mapper.Map<AccountDTO>(await _accountService.GetAccountByIdAsync(userId));
             return View(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> MyProfile(SystemAccount account)
+        public async Task<IActionResult> MyProfile(AccountDTO dto)
         {
-           
-
             if (ModelState.IsValid)
             {
-                await _accountService.UpdateAccountAsync(account.AccountId, _mapper.Map<AccountDTO>(account)); 
+                var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = int.Parse(userIdClaim);
+                await _accountService.UpdateAccountAsync(userId, dto);
                 TempData["SuccessMessage"] = "Your profile has been updated successfully!";
                 return RedirectToAction(nameof(MyProfile));
             }
-            return View(account);
+            return View(dto);
         }
 
         // GET: /Staff/MyNewsHistory
@@ -173,7 +173,7 @@ namespace NewsManagementSystem.Controllers
             var newsHistory = await _newsArticleService.GetNewsArticlesByUserIdAsync(userId);
             return View(newsHistory);
         }
-        
+
         private int GetUserFromToken()
         {
             var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);

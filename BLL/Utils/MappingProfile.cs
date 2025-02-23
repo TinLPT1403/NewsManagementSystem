@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using BLL.DTOs;
 using DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Utils
 {
@@ -14,6 +9,18 @@ namespace BLL.Utils
         public MappingProfile()
         {
             CreateMap<Category, CategoryDTO>();
+            CreateMap<SystemAccount, AccountDTO>()
+                .ForMember(dest => dest.Password, opt => opt.Ignore());
+
+            CreateMap<AccountDTO, SystemAccount>()
+                .ForMember(dest => dest.AccountPasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedArticles, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedArticles, opt => opt.Ignore());
+
+            CreateMap<AccountUpdateAdminDTO, SystemAccount>()
+                .ForMember(dest => dest.AccountPasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedArticles, opt => opt.Ignore())
+                .ForMember(dest => dest.UpdatedArticles, opt => opt.Ignore());
         }
     }
 }

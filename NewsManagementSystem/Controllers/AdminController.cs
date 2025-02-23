@@ -1,4 +1,6 @@
-﻿using BLL.Interfaces;
+﻿using AutoMapper;
+using BLL.DTOs;
+using BLL.Interfaces;
 using DAL.Entities;
 using DAL.UnitOfWork;
 using Microsoft.AspNetCore.Authorization;
@@ -12,17 +14,19 @@ namespace NewsManagementSystem.Controllers
         private readonly IAccountService _accountService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly INewsArticleService _newsArticleService;
-        public AdminController(IAccountService accountService, IUnitOfWork unitOfWork, INewsArticleService newsArticleService)
+        private readonly IMapper _mapper;
+        public AdminController(IAccountService accountService, IUnitOfWork unitOfWork, INewsArticleService newsArticleService, IMapper mapper)
         {
             _accountService = accountService;
             _unitOfWork = unitOfWork;
             _newsArticleService = newsArticleService;
+            _mapper = mapper;
         }
 
         // GET: /Admin/ManageAccounts
         public async Task<IActionResult> ManageAccounts()
         {
-            var accounts = await _accountService.GetAllAccountsAsync();
+            var accounts = await _accountService.GetAllAccountsForManageAsync();
             return View(accounts);
         }
 
@@ -43,7 +47,7 @@ namespace NewsManagementSystem.Controllers
 
         // POST: /Admin/CreateAccount
         [HttpPost]
-        public async Task<IActionResult> CreateAccount(SystemAccount account)
+        public async Task<IActionResult> CreateAccount(AccountCreateAdminDTO account)
         {
             if (ModelState.IsValid)
             {
@@ -60,21 +64,21 @@ namespace NewsManagementSystem.Controllers
         {
             var account = await _accountService.GetAccountByIdAsync(id);
             if (account == null) return NotFound();
-            return View(account);
+            return View(_mapper.Map<AccountUpdateAdminDTO>(account));
         }
 
         // POST: /Admin/EditAccount/{id}
         [HttpPost]
-        public async Task<IActionResult> EditAccount(int id, SystemAccount account)
+        public async Task<IActionResult> EditAccount(int id, AccountUpdateAdminDTO dto)
         {
             if (ModelState.IsValid)
             {
-                await _accountService.UpdateAccountAsync(id, account);
+                await _accountService.UpdateAccountAsync(id, dto);
                 TempData["Message"] = "Account updated successfully.";
                 return RedirectToAction(nameof(ManageAccounts));
             }
             TempData["Error"] = "Failed to update account.";
-            return View(account);
+            return View(dto);
         }
         public async Task<IActionResult> DeleteAccount(int id)
         {

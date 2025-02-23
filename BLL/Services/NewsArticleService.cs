@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,9 +28,10 @@ namespace BLL.Services
             _userUtils = userUtils;
             _newsArticleRepository = newsArticleRepository;
         }
-        public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto)
+        public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto, HttpContext httpContext)
         {
-            var userId = _userUtils.GetUserFromToken();
+            var userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = int.Parse(userIdClaim);
             Console.WriteLine("UserId: " + userId);
             var user = await _unitOfWork.SystemAccounts.GetByIdAsync(userId); // Fetch user by ID
             if (user == null)
@@ -104,8 +106,16 @@ namespace BLL.Services
 
         }
 
-        public async Task UpdateNewsArticleAsync(string id, NewsArticleUpdateDTO dto)
+        public async Task<IEnumerable<NewsArticle>> GetAllNewsArticlesAsync()
         {
+            return await _unitOfWork.NewsArticles.GetAllArticlesAsync();
+        }
+
+        public async Task UpdateNewsArticleAsync(string id, NewsArticleUpdateDTO dto, HttpContext httpContext)
+        {
+            var userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = int.Parse(userIdClaim);
+
             // Fetch the existing article by ID
             var article = await _unitOfWork.NewsArticles.GetByIdAsync(id);
 
@@ -140,6 +150,8 @@ namespace BLL.Services
             {
                 article.NewsStatus = dto.NewsStatus.Value;
             }
+
+            article.UpdatedById = userId;
 
             // Only update ModifiedDate if there's any change in the article
             article.ModifiedDate = DateTime.UtcNow;
@@ -196,7 +208,7 @@ namespace BLL.Services
         }
         public async Task<IEnumerable<NewsArticle>> GenerateReport(DateTime startDate, DateTime endDate)
         {
-            
+
             return (IEnumerable<NewsArticle>)await _unitOfWork.NewsArticles.GetByConditionAsync(a => a.ModifiedDate >= startDate && a.ModifiedDate <= endDate);
         }
 

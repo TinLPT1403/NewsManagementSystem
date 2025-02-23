@@ -8,7 +8,7 @@
 <style>
     /* Theme Variables - Customize these to change the theme */
     :root {
-    --primary-color: #007bff; /* Example primary color (like buttons) */
+    --primary-color: #0056b3; /* Example primary color (like buttons) */
     --secondary-color: #6c757d; /* Example secondary color */
     --background-color: #f8f9fa; /* Light background */
     --text-color: #343a40; /* Dark text */
@@ -24,7 +24,7 @@
     font-family: sans-serif; /* Example font */
     }
 
-    h1, h2, h3 {
+    h1, h2, h3, h4{
     color: var(--text-color);
     }
 
@@ -223,7 +223,7 @@
                     <h3>
                         @Html.DisplayFor(modelItem => item.Headline)
                     </h3>
-
+                    <h4>Status: @(item.NewsStatus == true ? "Published" : "Draft")</h4>
                     <div class="news-content-preview">
                         @{
                             // Create a preview of the news content, e.g., first 100 characters
@@ -232,7 +232,8 @@
                         @contentPreview
                     </div>
                     <div class="news-meta">
-                        Published Date: @Html.DisplayFor(modelItem => item.ModifiedDate) | Source: @Html.DisplayFor(modelItem => item.NewsSource) | Category: @Html.DisplayFor(modelItem => item.Category.CategoryName) | Author : @Html.DisplayFor(modelItem=> item.CreatedBy.AccountName)
+                        Published Date: @Html.DisplayFor(modelItem => item.ModifiedDate) | Source: @Html.DisplayFor(modelItem => item.NewsSource) | Category: @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                        | Author : @Html.DisplayFor(modelItem => item.CreatedBy.AccountName) | Modified by :  @Html.DisplayFor(modelItem => item.UpdatedBy.AccountName)
                     </div>
                     @foreach (var a in item.NewsTags)
                     {

@@ -22,5 +22,10 @@ namespace DAL.Repositories
         {
             return await _newsContext.SystemAccounts.FirstOrDefaultAsync(a => a.AccountEmail == email);
         }
+
+        public async Task<IEnumerable<SystemAccount>> GetAllForManage()
+        {
+            return await _newsContext.SystemAccounts.Where(a => a.AccountRole != 3).ToListAsync();
+        }
     }
 }

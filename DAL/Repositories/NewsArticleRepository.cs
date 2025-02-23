@@ -58,5 +58,15 @@ namespace DAL.Repositories
                 .FirstOrDefaultAsync(article => article.NewsArticleId == id);
         }
 
+        public async Task<IEnumerable<NewsArticle>> GetAllArticlesAsync()
+        {
+            return await _newsContext.NewsArticles
+                            .Include(article => article.Category)   // Include Category to access CategoryDescription
+                            .Include(article => article.CreatedBy)  // Include CreatedBy to access AccountId
+                            .Include(article => article.UpdatedBy)  // Include UpdatedBy to access AccountId
+                            .Include(article => article.NewsTags)
+                            .ThenInclude(newstags => newstags.Tag)
+                            .ToListAsync();
+        }
     }
 }

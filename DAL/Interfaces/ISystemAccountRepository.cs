@@ -10,5 +10,6 @@ namespace DAL.Interfaces
     public interface ISystemAccountRepository : IGenericRepository<SystemAccount>
     {
         Task<SystemAccount?> GetByEmailAsync(string email);
+        Task<IEnumerable<SystemAccount>> GetAllForManage();
     }
 }

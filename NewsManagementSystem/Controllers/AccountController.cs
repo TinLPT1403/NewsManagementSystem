@@ -51,13 +51,14 @@ namespace NewsManagementSystem.Controllers
                 var adminIdentity = new ClaimsIdentity(adminClaims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var adminPrincipal = new ClaimsPrincipal(adminIdentity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, adminPrincipal);
+                HttpContext.User = adminPrincipal;
 
                 return RedirectToAction("ManageAccounts", "Admin");
             }
 
 
-            var token = await _accountService.AuthenticateAsync(email, password);
-            if (token == null)
+            var account = await _accountService.AuthenticateAsync(email, password);
+            if (account == null)
             {
                 TempData["Error"] = "Invalid email or password.";
                 return RedirectToAction("Login", "Account");
@@ -70,14 +71,14 @@ namespace NewsManagementSystem.Controllers
                 IsPersistent = true
             };
 
-            // Retrieve user account details after authentication
-            var user = await _accountService.GetAccountByIdAsync(_userUtils.GetUserFromInputToken(token));
+            //// Retrieve user account details after authentication
+            //var user = await _accountService.GetAccountByIdAsync(_userUtils.GetUserFromInputToken(token));
 
             var claims = new List<Claim>
                 {
-                new(ClaimTypes.NameIdentifier, user.AccountId.ToString()),
-                new(ClaimTypes.Name, user.AccountName),
-                new(ClaimTypes.Role, user.AccountRole.ToString())
+                new(ClaimTypes.NameIdentifier, account.AccountId.ToString()),
+                new(ClaimTypes.Name, account.AccountName),
+                new(ClaimTypes.Role, account.AccountRole.ToString())
                 };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -105,7 +106,7 @@ namespace NewsManagementSystem.Controllers
 
         // POST: /Admin/CreateAccount
         [HttpPost]
-        public async Task<IActionResult> Register(AccountDTO dto)
+        public async Task<IActionResult> Register(AccountCreateDTO dto)
         {
             if (ModelState.IsValid)
             {
@@ -119,14 +120,8 @@ namespace NewsManagementSystem.Controllers
         // GET: /Account/Logout
         public async Task<IActionResult> Logout()
         {
-            // await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("All", "Guest");
-        }
-
-        private async Task<string> ValidateUserAsync(string email, string password)
-        {
-
-            return await _accountService.AuthenticateAsync(email, password);
         }
     }
 }
