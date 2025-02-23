@@ -33,6 +33,8 @@ namespace NewsManagementSystem.Controllers
             if (account == null) return NotFound();
             return View(account);
         }
+
+
         // GET: /Admin/CreateAccount
         public IActionResult CreateAccount()
         {

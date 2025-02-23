@@ -99,8 +99,12 @@
             </p>
             <div class="article-content">
                 @* Display a limited amount of content - adjust length as needed *@
-                @Html.Raw(item.NewsContent.Length > 50 ? item.NewsContent.Substring(0, 50) + "..." : item.NewsContent)
+                @Html.Raw(item.NewsContent!.Length > 50 ? item.NewsContent.Substring(0, 50) + "..." : item.NewsContent)
             </div>
+            @foreach (var a in item.NewsTags)
+            {
+                <button type="button" class="btn btn-outline-primary" style="margin-bottom: 10px">@a.Tag.TagName</button>
+            }
         </div>
     }
 </div>

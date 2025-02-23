@@ -189,16 +189,17 @@
                     <small class="form-text text-muted">Leave password field blank to keep the current password.</small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" style="text-align: center;margin-top: 10px;">
                     <input type="submit" value="Save Changes" class="btn btn-primary" />
                 </div>
             </form>
+            <p class="back-to-list">
+                <a asp-action="ManageAccounts">Back to Account List</a>
+            </p>
         </div>
     </div>
 
-    <p class="back-to-list">
-        <a asp-action="ManageAccounts">Back to Account List</a>
-    </p>
+
 </div>
 
 @section Scripts {
