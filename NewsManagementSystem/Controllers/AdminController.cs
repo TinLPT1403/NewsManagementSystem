@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NewsManagementSystem.Controllers
 {
-    [Authorize(Roles = "3")]
+    [Authorize(Policy = "Admin")]
     public class AdminController : Controller
     {
         private readonly IAccountService _accountService;
@@ -26,18 +26,14 @@ namespace NewsManagementSystem.Controllers
             return View(accounts);
         }
 
-        public async Task<IActionResult> DetailsAccount(int id) 
-        { 
-        
+        public async Task<IActionResult> DetailsAccount(int id)
+        {
+
             var account = await _accountService.GetAccountByIdAsync(id);
             if (account == null) return NotFound();
             return View(account);
         }
-        // GET: /Admin/CreateAccount
-        public IActionResult Register()
-        {
-            return View();
-        }
+
 
         // GET: /Admin/CreateAccount
         public IActionResult CreateAccount()
@@ -105,7 +101,7 @@ namespace NewsManagementSystem.Controllers
             var reportData = await _unitOfWork.NewsArticles.GetAllByListAsync(n => n.CreatedDate >= startDate &&
                                                                                     n.CreatedDate <= endDate);
             return View(reportData);
-            
+
         }
 
         // POST: /Admin/GenerateReport

@@ -24,12 +24,11 @@ namespace DAL.Entities
         public string AccountEmail { get; set; }
 
         [Required]
-        [Range(1, 2)]
+        [Range(1, 3)]
         public int AccountRole { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 6)]
-        public string AccountPassword { get; set; }
+        public string AccountPasswordHash { get; set; }
 
         public virtual ICollection<NewsArticle> CreatedArticles { get; set; } = new List<NewsArticle>(); // Reverse navigation
         public virtual ICollection<NewsArticle> UpdatedArticles { get; set; } = new List<NewsArticle>(); // Reverse navigation

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DAL.Data;
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NewsManagementSystem.Controllers
 {
+    [Authorize(Policy = "Staff")]
     public class CategoriesController : Controller
     {
         private readonly NewsContext _context;

@@ -148,8 +148,8 @@ namespace DAL.Extensions
                     AccountName = "Kha UwU",
                     AccountEmail = "admin@example.com",
                     AccountRole = 3, // Assuming 3 represents an admin role
-                    AccountPassword = "123456" // Ideally, use a hashed password
-                }
+                    AccountPasswordHash = "$2a$11$rwxlp.y4gjXvIW7IreN0LOpB9RIptTa/AnFIq0CM9GaEAaXcWKhDa" // Ideally, use a hashed password
+            }
             );
 
             modelBuilder.Entity<SystemAccount>().HasData(
@@ -158,8 +158,8 @@ namespace DAL.Extensions
                     AccountId = -2,
                     AccountName = "John",
                     AccountEmail = "lecturer@example.com",
-                    AccountRole = 2, 
-                    AccountPassword = "123456" 
+                    AccountRole = 2,
+                    AccountPasswordHash = "$2a$11$r4p3qfWEXlXdPjUwOpF0DOKoTga8YV7Q9TKKHfX7XNH8GaZV.Mp/m"
                 }
             );
             modelBuilder.Entity<SystemAccount>().HasData(
@@ -168,8 +168,8 @@ namespace DAL.Extensions
                     AccountId = -3,
                     AccountName = "Larry",
                     AccountEmail = "staff@example.com",
-                    AccountRole = 1, 
-                    AccountPassword = "123456" 
+                    AccountRole = 1,
+                    AccountPasswordHash = "$2a$11$XhFt4joOsZAtT2U3JZnc4OF16cwVwZ/rA6VMB8wR9UizPs9rf5/we"
                 }
             );
         }

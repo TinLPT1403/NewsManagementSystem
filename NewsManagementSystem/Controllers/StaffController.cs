@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace NewsManagementSystem.Controllers
 {
-    //[Authorize(Roles = "Staff")]
+    [Authorize(Policy = "Staff")]
     public class StaffController : Controller
     {
         private readonly ICategoryService _categoryService;
@@ -146,7 +146,8 @@ namespace NewsManagementSystem.Controllers
         // GET: /Staff/MyProfile
         public async Task<IActionResult>  MyProfile()
         {
-            var userId = 1;
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c=>c.Type==ClaimTypes.NameIdentifier)?.Value;
+            var userId = int.Parse(userIdClaim);
             var user = await _accountService.GetAccountByIdAsync(userId); 
             return View(user);
         }
@@ -158,7 +159,7 @@ namespace NewsManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                await _accountService.UpdateAccountAsync(account.AccountId, account); 
+                await _accountService.UpdateAccountAsync(account.AccountId, _mapper.Map<AccountDTO>(account)); 
                 TempData["SuccessMessage"] = "Your profile has been updated successfully!";
                 return RedirectToAction(nameof(MyProfile));
             }

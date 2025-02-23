@@ -37,15 +37,6 @@ namespace NewsManagementSystem
             // Initialize TokenService with configuration
             TokenService.Initialize(builder.Configuration);
 
-            // Cookie authentication
-            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(options =>
-            //    {
-            //        options.LoginPath = "/Account/Login";
-            //        options.LogoutPath = "/Account/Logout";
-            //        options.AccessDeniedPath = "/Account/AccessDenied";
-            //    });
-
             // JWT token authentication for API endpoints (optional)
             builder.Services.AddAuthentication(options =>
             {
@@ -77,8 +68,8 @@ namespace NewsManagementSystem
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("Lecturer", policy => policy.RequireRole("1"));
-                options.AddPolicy("Staff", policy => policy.RequireRole("2"));
+                options.AddPolicy("Staff", policy => policy.RequireRole("1", "3"));
+                options.AddPolicy("Lecturer", policy => policy.RequireRole("2", "1", "3"));
                 options.AddPolicy("Admin", policy => policy.RequireRole("3"));
             });
 
@@ -91,6 +82,7 @@ namespace NewsManagementSystem
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
             builder.Services.AddScoped<UserUtils>();
+            builder.Services.AddScoped<PasswordUtils>();
             builder.Services.AddHttpContextAccessor();
 
             // Add session services
