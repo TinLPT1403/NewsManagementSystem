@@ -1,4 +1,5 @@
-﻿using DAL.Entities;
+﻿using BLL.DTOs;
+using DAL.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,9 @@ namespace BLL.Interfaces
         Task<string?> AuthenticateAsync(string email, string password);
         Task<IEnumerable<SystemAccount>> GetAllAccountsAsync();
         Task<SystemAccount> GetAccountByIdAsync(int id);
+        Task CreateAccountAsync(AccountDTO account);
         Task CreateAccountAsync(SystemAccount account);
+        Task UpdateAccountAsync(int id, AccountDTO account);
         Task UpdateAccountAsync(int id, SystemAccount account);
         Task DeleteAccountAsync(int id);
 

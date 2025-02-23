@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.DTOs;
 
 namespace NewsManagementSystem.Controllers
 {
@@ -82,14 +83,14 @@ namespace NewsManagementSystem.Controllers
 
         // POST: /Admin/CreateAccount
         [HttpPost]
-        public async Task<IActionResult> Register(SystemAccount account)
+        public async Task<IActionResult> Register(AccountDTO dto)
         {
             if (ModelState.IsValid)
             {
-                await _accountService.CreateAccountAsync(account);
+                await _accountService.CreateAccountAsync(dto);
                 return RedirectToAction(nameof(Login));
             }
-            return View(account);
+            return View(dto);
         }
 
 

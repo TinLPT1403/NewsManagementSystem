@@ -159,7 +159,7 @@ namespace NewsManagementSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                await _accountService.UpdateAccountAsync(account.AccountId, account); 
+                await _accountService.UpdateAccountAsync(account.AccountId, _mapper.Map<AccountDTO>(account)); 
                 TempData["SuccessMessage"] = "Your profile has been updated successfully!";
                 return RedirectToAction(nameof(MyProfile));
             }

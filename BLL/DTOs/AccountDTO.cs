@@ -8,9 +8,8 @@ namespace BLL.DTOs
 {
     public class AccountDTO
     {
-        public string Email { get; set; }
+        public string AccountName { get; set; }
+        public string AccountEmail { get; set; }
         public string Password { get; set; }
-        public string Name { get; set; }
-         
     }
 }

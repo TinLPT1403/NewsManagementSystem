@@ -217,12 +217,7 @@
             <div class="account-meta">
                 Email: @Html.DisplayFor(modelItem => item.AccountEmail)
             </div>
-            <div class="account-meta">
-                Password:
-                <span class="password-display" id="password-@item.AccountId" data-hidden-password="@item.AccountPassword">********</span>
-                <button id="show-password-btn-@item.AccountId" type="button" class="btn btn-sm btn-outline-secondary show-password-button" onclick="togglePasswordVisibility('@item.AccountId')">Show Password</button>
-                <small>(Click to view)</small>
-            </div>
+
 
             <div class="account-actions">
                 <a asp-action="EditAccount" asp-route-id="@item.AccountId">Edit</a>
