@@ -101,9 +101,12 @@
                 @* Display a limited amount of content - adjust length as needed *@
                 @Html.Raw(item.NewsContent.Length > 200 ? item.NewsContent.Substring(0, 50) + "..." : item.NewsContent)
             </div>
+            @foreach (var a in item.NewsTags)
+            {
+                <button type="button" class="btn btn-outline-primary" style="margin-bottom: 10px">@a.Tag.TagName</button>
+            }
             <div class="article-actions">
                 <a asp-action="Details" asp-controller="Lecturer" asp-route-id="@item.NewsArticleId" class="btn btn-primary btn-sm">Read More</a>
-               
             </div>
         </div>
     }

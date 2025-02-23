@@ -140,6 +140,14 @@ namespace NewsManagementSystem.Controllers
                 return NotFound();
             }
 
+            var hasValidCategory = await _context.NewsArticles.AnyAsync(n => n.CategoryId == category.CategoryId);
+
+            if(hasValidCategory)
+            {
+                TempData["Error"] = "Category has Articles";
+                return RedirectToAction(nameof(Index), new { id = id });
+            }
+
             return View(category);
         }
 

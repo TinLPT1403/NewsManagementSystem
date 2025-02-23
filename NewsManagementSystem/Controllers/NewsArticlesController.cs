@@ -189,10 +189,29 @@ namespace NewsManagementSystem.Controllers
 
             if (tagId.HasValue)
             {
-                var taggedArticles = await _newsTagService.GetArticlesFromTagAsync(tagId.Value);
-                articles = articles.Intersect(taggedArticles).ToList();
+                try
+                {
+                    var taggedArticles = await _newsTagService.GetArticlesFromTagAsync(tagId.Value);
+                    articles = articles.Intersect(taggedArticles).ToList();
+
+                    // If no articles match the tag filter, return an empty list
+                    if (!articles.Any())    
+                    {
+                        return await PrepareAndReturnView(categoryId, tagId, new List<NewsArticle>());
+                    }
+                }
+                catch(KeyNotFoundException)
+                {
+                    return await PrepareAndReturnView(categoryId, tagId, new List<NewsArticle>());
+                }
             }
 
+            return await PrepareAndReturnView(categoryId, tagId, articles);
+        }
+
+        // Helper method to set ViewData and return the view
+        private async Task<IActionResult> PrepareAndReturnView(int? categoryId, int? tagId, IEnumerable<NewsArticle> articles)
+        {
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName", categoryId);
             ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName", tagId);
 

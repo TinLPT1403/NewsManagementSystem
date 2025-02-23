@@ -142,6 +142,11 @@
     <a asp-action="Create">Create New Category</a>
 </p>
 
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
 <div class="categories-container">
     @foreach (var item in Model)
     {

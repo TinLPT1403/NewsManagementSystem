@@ -19,12 +19,14 @@ namespace NewsManagementSystem.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IConfiguration _configuration;
         private readonly IAccountService _accountService;
         private readonly UserUtils _userUtils;
-        public AccountController(IAccountService accountService, UserUtils userUtils)
+        public AccountController(IAccountService accountService, UserUtils userUtils, IConfiguration configuration)
         {
             _accountService = accountService;
             _userUtils = userUtils;
+            _configuration = configuration;
         }
         // GET: /Account/Login
         public IActionResult Login() => View();
@@ -34,6 +36,26 @@ namespace NewsManagementSystem.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+            string adminEmail = _configuration["AdminCredentials:Email"];
+            string adminPassword = _configuration["AdminCredentials:Password"];
+
+            if (email == adminEmail && password == adminPassword)
+            {
+                var adminClaims = new List<Claim>
+                {
+                    new(ClaimTypes.NameIdentifier, "Admin"),
+                    new(ClaimTypes.Name, "Administrator"),
+                    new(ClaimTypes.Role, "3")
+                };
+
+                var adminIdentity = new ClaimsIdentity(adminClaims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var adminPrincipal = new ClaimsPrincipal(adminIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, adminPrincipal);
+
+                return RedirectToAction("ManageAccounts", "Admin");
+            }
+
+
             var token = await _accountService.AuthenticateAsync(email, password);
             if (token == null)
             {

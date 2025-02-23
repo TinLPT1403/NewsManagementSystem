@@ -207,10 +207,6 @@
                         <th>
                             @Html.DisplayNameFor(model => model.CreatedDate)
                         </th>
-                        <th>
-                            Category
-                        </th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -225,12 +221,6 @@
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CreatedDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Category.CategoryDescription)
-                            </td>
-                            <td>
-                                <a asp-action="Details" asp-controller="Lecturer" asp-route-id="@item.NewsArticleId">Details</a>
                             </td>
                         </tr>
                     }
