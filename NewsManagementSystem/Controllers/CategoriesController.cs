@@ -152,7 +152,15 @@ namespace NewsManagementSystem.Controllers
                 _context.Categories.Remove(category);
             }
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                TempData["Error"] = "Failed to delete category.";
+                return RedirectToAction(nameof(Delete), new { id = id });
+            }
             return RedirectToAction(nameof(Index));
         }
 
