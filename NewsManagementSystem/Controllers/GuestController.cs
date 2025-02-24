@@ -18,7 +18,7 @@ namespace NewsManagementSystem.Controllers
         }
         public async Task<IActionResult> All()
         {
-            var list = await _newsArticleService.GetActiveNewsArticlesAsync();
+            var list = await _newsArticleService.GetArticlesWithActiveCategories();
             return View(list);
         }
 

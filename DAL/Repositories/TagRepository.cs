@@ -16,5 +16,7 @@ namespace DAL.Repositories
         {
             newsContext = context;
         }
+
+
     }
 }

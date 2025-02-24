@@ -37,7 +37,7 @@ namespace NewsManagementSystem.Controllers
         {
             ViewData["CategoryId"] = new SelectList(await _categoryService.GetActiveCategoriesAsync(), "CategoryId", "CategoryName");
             ViewData["TagId"] = new SelectList(await _tagService.GetAllTagsAsync(), "TagId", "TagName");
-            var list = await _newsArticleService.GetAllNewsArticlesAsync();
+            var list = await _newsArticleService.GetArticlesWithActiveCategories();
             return View(list);
 
         }

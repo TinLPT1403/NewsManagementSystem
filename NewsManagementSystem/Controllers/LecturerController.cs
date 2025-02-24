@@ -20,7 +20,7 @@ namespace NewsManagementSystem.Controllers
         }
         public async Task<IActionResult> All()
         {
-            return View( await _newsArticleService.GetActiveNewsArticlesAsync());
+            return View( await _newsArticleService.GetArticlesWithActiveCategories());
         }
 
         // GET: LecturerController/Details/5

@@ -15,5 +15,6 @@ namespace BLL.Interfaces
         Task DeleteTagAsync(int TagId);
         Task<Tag> GetTagAsync(int TagId);
         Task<IEnumerable<Tag>> GetAllTagsAsync();
+
     }
 }

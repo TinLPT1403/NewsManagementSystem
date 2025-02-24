@@ -212,5 +212,10 @@ namespace BLL.Services
             return (IEnumerable<NewsArticle>)await _unitOfWork.NewsArticles.GetByConditionAsync(a => a.ModifiedDate >= startDate && a.ModifiedDate <= endDate);
         }
 
+        public async Task<IEnumerable<NewsArticle>> GetArticlesWithActiveCategories()
+        {
+            return await _unitOfWork.NewsArticles.GetArticlesWithActiveCategories();
+        }
+
     }
 }
