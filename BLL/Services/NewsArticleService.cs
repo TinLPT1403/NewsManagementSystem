@@ -1,4 +1,4 @@
-﻿using BLL.DTOs;
+﻿ using BLL.DTOs;
 using BLL.Interfaces;
 using BLL.Utils;
 using DAL.Entities;
@@ -20,13 +20,12 @@ namespace BLL.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserUtils _userUtils;
-        private readonly INewsArticleRepository _newsArticleRepository;
 
-        public NewsArticleService(IUnitOfWork unitOfWork, UserUtils userUtils, INewsArticleRepository newsArticleRepository)
+        public NewsArticleService(IUnitOfWork unitOfWork, UserUtils userUtils)
         {
             _unitOfWork = unitOfWork;
             _userUtils = userUtils;
-            _newsArticleRepository = newsArticleRepository;
+
         }
         public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto, HttpContext httpContext)
         {
@@ -95,14 +94,14 @@ namespace BLL.Services
             }
         }
 
-        public async Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync() => await _newsArticleRepository.GetActiveNewsArticlesAsync();
+        public async Task<IEnumerable<NewsArticle>> GetActiveNewsArticlesAsync() => await _unitOfWork.NewsArticles.GetActiveNewsArticlesAsync();
 
 
-        public async Task<NewsArticle> GetNewsArticleByIdAsync(string id) => await _newsArticleRepository.GetNewsArticleByIdAsync(id);
+        public async Task<NewsArticle> GetNewsArticleByIdAsync(string id) => await _unitOfWork.NewsArticles.GetNewsArticleByIdAsync(id);
 
         public async Task<IEnumerable<NewsArticle>> GetNewsArticlesByUserIdAsync(int userId)
         {
-            return await _newsArticleRepository.GetActiveNewsArticlesByUserIdAsync(userId);
+            return await _unitOfWork.NewsArticles.GetActiveNewsArticlesByUserIdAsync(userId);
 
         }
 

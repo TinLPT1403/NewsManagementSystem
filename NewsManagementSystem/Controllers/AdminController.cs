@@ -92,7 +92,6 @@ namespace NewsManagementSystem.Controllers
 
         // POST: /Admin/DeleteAccount/{id}
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _accountService.DeleteAccountAsync(id);

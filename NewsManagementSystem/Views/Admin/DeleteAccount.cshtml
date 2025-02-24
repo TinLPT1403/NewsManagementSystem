@@ -171,7 +171,7 @@
     </dl>
 
     <div class="delete-confirmation-actions">
-        <form asp-action="DeleteAccount" asp-route-id="@Model.AccountId" method="post">
+        <form asp-action="Delete" asp-route-id="@Model.AccountId" method="post">
             <input type="hidden" asp-for="AccountId" />
             <input type="submit" value="Delete Account" class="btn-delete" />
             <a asp-action="ManageAccounts" class="back-to-list-link">Back to Account List</a>
