@@ -21,6 +21,9 @@ namespace BLL.Utils
                 .ForMember(dest => dest.AccountPasswordHash, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedArticles, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedArticles, opt => opt.Ignore());
+
+            CreateMap<SystemAccount, AccountUpdateAdminDTO>()
+                .ForMember(dest => dest.Password, opt => opt.Ignore()); // Ignore password for security
         }
     }
 }

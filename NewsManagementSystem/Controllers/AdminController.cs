@@ -64,7 +64,8 @@ namespace NewsManagementSystem.Controllers
         {
             var account = await _accountService.GetAccountByIdAsync(id);
             if (account == null) return NotFound();
-            return View(_mapper.Map<AccountUpdateAdminDTO>(account));
+            var accountMapped = (_mapper.Map<AccountUpdateAdminDTO>(account));
+            return View(accountMapped);
         }
 
         // POST: /Admin/EditAccount/{id}
