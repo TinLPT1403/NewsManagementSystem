@@ -21,11 +21,9 @@ namespace NewsManagementSystem.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IAccountService _accountService;
-        private readonly UserUtils _userUtils;
-        public AccountController(IAccountService accountService, UserUtils userUtils, IConfiguration configuration)
+        public AccountController(IAccountService accountService, IConfiguration configuration)
         {
             _accountService = accountService;
-            _userUtils = userUtils;
             _configuration = configuration;
         }
         // GET: /Account/Login

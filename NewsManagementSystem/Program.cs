@@ -81,7 +81,6 @@ namespace NewsManagementSystem
             builder.Services.AddScoped<INewsTagService, NewsTagService>();
             builder.Services.AddScoped<ITagService, TagService>();
             builder.Services.AddScoped<INewsArticleRepository, NewsArticleRepository>();
-            builder.Services.AddScoped<UserUtils>();
             builder.Services.AddScoped<PasswordUtils>();
             builder.Services.AddHttpContextAccessor();
 

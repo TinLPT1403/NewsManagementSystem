@@ -19,12 +19,10 @@ namespace BLL.Services
     public class NewsArticleService : INewsArticleService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly UserUtils _userUtils;
 
-        public NewsArticleService(IUnitOfWork unitOfWork, UserUtils userUtils)
+        public NewsArticleService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _userUtils = userUtils;
 
         }
         public async Task CreateNewsArticleAsync(NewsArticleCreateDTO dto, HttpContext httpContext)

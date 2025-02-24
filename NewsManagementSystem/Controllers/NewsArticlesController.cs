@@ -21,15 +21,13 @@ namespace NewsManagementSystem.Controllers
         private readonly ICategoryService _categoryService;
         private readonly INewsTagService _newsTagService;
         private readonly ITagService _tagService;
-        private readonly UserUtils _userUtils;
 
-        public NewsArticlesController(INewsArticleService newsArticleService, ICategoryService categoryService, INewsTagService newsTagService, ITagService tagService, UserUtils userUtils)
+        public NewsArticlesController(INewsArticleService newsArticleService, ICategoryService categoryService, INewsTagService newsTagService, ITagService tagService)
         {
             _newsArticleService = newsArticleService;
             _categoryService = categoryService;
             _newsTagService = newsTagService;
             _tagService = tagService;
-            _userUtils = userUtils;
         }
 
         // GET: NewsArticles
